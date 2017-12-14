@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/Stunny/pw1-pr4/issues"
   },
-  "homepage": "https://github.com/Stunny/pw1-pr4#readme"
+  "homepage": "https://github.com/Stunny/pw1-pr4#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-beautify": "^2.0.1",
+    "gulp-cssbeautify": "^0.1.3",
+    "gulp-html-minifier2": "^1.1.8",
+    "gulp-javascript-obfuscator": "^1.1.4",
+    "gulp-mcss": "^1.0.2",
+    "gulp-util": "^3.0.8"
+  }
 }
