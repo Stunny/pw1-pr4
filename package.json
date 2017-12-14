@@ -1,0 +1,19 @@
+{
+  "name": "pw1-pr4",
+  "version": "0.0.1",
+  "description": "Ajax requests web dungeon game",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stunny/pw1-pr4.git"
+  },
+  "author": "Angel Farre, Rafa Rebollo, Alex Vogel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stunny/pw1-pr4/issues"
+  },
+  "homepage": "https://github.com/Stunny/pw1-pr4#readme"
+}
