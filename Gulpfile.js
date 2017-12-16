@@ -11,15 +11,15 @@ gulp.task('html', ()=>{
 });
 
 gulp.task('obfjs', ()=>{
-  return gulp.src('./src/scripts/*.js')
+  return gulp.src('./src/js/*.js')
   .pipe(jsof())
-  .pipe(gulp.dest('./build/scripts/'));
+  .pipe(gulp.dest('./build/js/'));
 });
 
 gulp.task('mincss', ()=>{
-  return gulp.src('./src/scripts/*.css')
+  return gulp.src('./src/css/*.css')
   .pipe(cssmin())
-  .pipe('.build/css/');
+  .pipe(gulp.dest('./build/css/'));
 });
 
 gulp.task('default', ['html', 'obfjs', 'mincss']);

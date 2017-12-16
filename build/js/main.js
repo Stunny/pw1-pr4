@@ -1,0 +1,1 @@
+function iniciarJuego(){}function mapaToImg(_0x50deb5,_0x3239f8){}
