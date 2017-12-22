@@ -60,3 +60,35 @@ function pintaImagen(src, x, y) {
 function pintaPosicion(x, y) {
   pintaImagen(mapaToImg(x, y), 0, 0);
 }
+
+/**
+ * Mueve el personaje hacia arriba/de frente en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
+ */
+function moveUp() {
+
+}
+
+/**
+ * Mueve el personaje hacia abajo/atras en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
+ */
+function moveDown() {
+
+}
+
+/**
+ * Mueve el personaje hacia derecha en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
+ */
+function moveRight() {
+
+}
+
+/**
+ * Mueve el personaje hacia izquierda en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
+ */
+function moveUp() {
+
+}
