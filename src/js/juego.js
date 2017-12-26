@@ -7,14 +7,41 @@ var partida = {};
 var mapa = [];
 
 var objetos = {
-  garrote: {ataque:1, defensa:0},
-  llave: {}
+  piedra: {ataque:1, defensa:0, vida:0},
+  palo: {ataque:2, defensa:0, vida:0},
+  daga: {ataque:5, defensa:0, vida:0},
+  escudo: {ataque:0, defensa:3, vida:0},
+  casco: {ataque:0, defensa:2, vida:0},
+  peto: {ataque:0, defensa:5, vida:0},
+  pocion: {ataque:0, defensa:0, vida:vidaTotal/2},
+  lembas: {ataque:0, defensa:0, vida:vidaTotal},
+  vendas: {ataque:0, defensa:0, vida:5},
+  flor: {ataque:0, defensa:0, vida:0}
 };
 
-var enemigo = {
-  vida:0,
-  ataque:0,
+//TODO: IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
+var goblin = {
+  vida:5,
+  ataque:2,
   defensa:0,
+  xp:0,
+  img:"",
+  objetos:[]
+};
+
+var orco = {
+  vida:7,
+  ataque:4,
+  defensa:2,
+  xp:0,
+  img:"",
+  objetos:[]
+};
+
+var araña = {
+  vida:10,
+  ataque:7,
+  defensa:6,
   xp:0,
   img:"",
   objetos:[]
@@ -24,18 +51,39 @@ var player = {
   nombre:"",
   vida:10,
   nivel:0,
-  xp:0,
-  ataque:2,
-  defensa:2,
-  manoderecha:"garrot",
+  personaje:null,
+  manoderecha:"",
   manoizquierda:"",
-  mochila:[],
   estadoPartida: {
-    x:3,
+    x:4,
     y:1,
-    nivel:-2,
+    nivel:-3,
     direccion:0, /* 0 Norte, 1 Sud, 2 Este, 3 Oeste*/
   }
+};
+
+var elfo = {
+  ataque:4,
+  defensa:4,
+  xp:0,
+  img:"",
+  mochila:[lembas]
+};
+
+var humano = {
+  ataque:5,
+  defensa:3,
+  xp:0,
+  img:"",
+mochila:[palo]
+};
+
+var enano = {
+  ataque:6,
+  defensa:2,
+  xp:0,
+  img:"",
+  mochila:[casco]
 };
 
 /* Se llama al cargar todos los elementos de la página */
