@@ -1,6 +1,26 @@
 /* Inicializar el juego */
 function iniciarJuego() {
+  loadMap(-3);
   /* TODO */
+}
+
+/**
+ * Carga el mapa correspondiente y lo devuelve en una matriz
+ * @return {[type]} Matriz con todos los elementos del mapa cargados
+ */
+function loadMap(mapa){
+  switch(mapa){
+    case -3:
+
+      break;
+    case -2:
+
+      break;
+    case -1:
+
+      break;
+  }
+
 }
 
 /**

@@ -1,5 +1,6 @@
 /* No tocar código */
 var partida = {};
+var vidaPlayer = 10;
 
 /*
   Dimensió: 10x10
@@ -7,16 +8,16 @@ var partida = {};
 var mapa = [];
 
 var objetos = {
-  piedra: {ataque:1, defensa:0, vida:0},
-  palo: {ataque:2, defensa:0, vida:0},
-  daga: {ataque:5, defensa:0, vida:0},
-  escudo: {ataque:0, defensa:3, vida:0},
-  casco: {ataque:0, defensa:2, vida:0},
-  peto: {ataque:0, defensa:5, vida:0},
-  pocion: {ataque:0, defensa:0, vida:vidaTotal/2},
-  lembas: {ataque:0, defensa:0, vida:vidaTotal},
-  vendas: {ataque:0, defensa:0, vida:5},
-  flor: {ataque:0, defensa:0, vida:0}
+  piedra: {ataque:1, defensa:0, hp:0},
+  palo: {ataque:2, defensa:0, hp:0},
+  daga: {ataque:5, defensa:0, hp:0},
+  escudo: {ataque:0, defensa:3, hp:0},
+  casco: {ataque:0, defensa:2, hp:0},
+  peto: {ataque:0, defensa:5, hp:0},
+  pocion: {ataque:0, defensa:0, hp:vidaPlayer/2},
+  lembas: {ataque:0, defensa:0, hp:vidaPlayer},
+  vendas: {ataque:0, defensa:0, hp:5},
+  flor: {ataque:0, defensa:0, hp:0}
 };
 
 //TODO: IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
@@ -49,7 +50,7 @@ var araña = {
 
 var player = {
   nombre:"",
-  vida:10,
+  vida: vidaPlayer,
   nivel:0,
   personaje:null,
   manoderecha:"",
@@ -58,7 +59,7 @@ var player = {
     x:4,
     y:1,
     nivel:-3,
-    direccion:0, /* 0 Norte, 1 Sud, 2 Este, 3 Oeste*/
+    direccion:1, /* 0 Norte, 1 Sud, 2 Este, 3 Oeste*/
   }
 };
 
@@ -67,7 +68,7 @@ var elfo = {
   defensa:4,
   xp:0,
   img:"",
-  mochila:[lembas]
+  mochila:[objetos.lembas]
 };
 
 var humano = {
@@ -75,7 +76,7 @@ var humano = {
   defensa:3,
   xp:0,
   img:"",
-mochila:[palo]
+mochila:[objetos.palo]
 };
 
 var enano = {
@@ -83,7 +84,7 @@ var enano = {
   defensa:2,
   xp:0,
   img:"",
-  mochila:[casco]
+  mochila:[objetos.casco]
 };
 
 /* Se llama al cargar todos los elementos de la página */
@@ -109,12 +110,51 @@ function pintaPosicion(x, y) {
   pintaImagen(mapaToImg(x, y), 0, 0);
 }
 
+/*Comprueba que al moverse no haya una pared */
+function compruebaPared(x, y){
+
+}
+
 /**
  * Mueve el personaje hacia arriba/de frente en el mapa
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveUp() {
-
+  console.log("down");
+  switch (player.estadoPartida.direccion){
+    case 0:
+        if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
+          player.estadoPartida.y--;
+          return true;
+        }else{
+          return false;
+        }
+      break;
+    case 1:
+      if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
+        player.estadoPartida.y++;
+        return true;
+      }else{
+        return false;
+      }
+      break;
+    case 2:
+      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+        player.estadoPartida.x++;
+        return true;
+      }else{
+        return false;
+      }
+      break;
+    case 3:
+      if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
+        player.estadoPartida.x--;
+        return true;
+      }else{
+        return false;
+      }
+      break;
+  }
 }
 
 /**
@@ -122,7 +162,40 @@ function moveUp() {
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveDown() {
-
+  switch (player.estadoPartida.direccion){
+    case 0:
+        if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
+          player.estadoPartida.y++;
+          return true;
+        }else{
+          return false;
+        }
+      break;
+    case 1:
+      if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
+        player.estadoPartida.y--;
+        return true;
+      }else{
+        return false;
+      }
+      break;
+    case 2:
+      if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
+        player.estadoPartida.x--;
+        return true;
+      }else{
+        return false;
+      }
+      break;
+    case 3:
+      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+        player.estadoPartida.x++;
+        return true;
+      }else{
+        return false;
+      }
+      break;
+  }
 }
 
 /**
@@ -130,13 +203,21 @@ function moveDown() {
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveRight() {
-
+  player.estadoPartida.direccion++;
+  if(player.estadoPartida.direccion == 4){
+    player.estadoPartida.direccion = 0;
+  }
+  return true;
 }
 
 /**
  * Mueve el personaje hacia izquierda en el mapa
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
-function moveUp() {
-
+function moveLeft() {
+  player.estadoPartida.direccion--;
+  if(player.estadoPartida.direccion == 0){
+    player.estadoPartida.direccion = 3;
+  }
+  return true;
 }
