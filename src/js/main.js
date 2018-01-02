@@ -1,3 +1,4 @@
+
 /* Inicializar el juego */
 function iniciarJuego() {
   loadMap(-3);
@@ -38,20 +39,23 @@ function mapaToImg(x, y) {
  * @return {boolean} True siempre
  */
 function bindKeyCodes(){
-  $(document).keydown((e)=>{
+  $(document).keypress((e)=>{
+    console.log("key pressed");
     switch(e.which){
-      case 83:
+      case window.gameConstants.MOVE_DOWN_CODE:
         moveDown();
-      break;
-      case 87:
+        break;
+      case window.gameConstants.MOVE_UP_CODE:
         moveUp();
-      break;
-      case 65:
+        break;
+      case window.gameConstants.MOVE_LEFT_CODE:
         moveLeft();
-      break;
-      case 68:
+        break;
+      case window.gameConstants.MOVE_RIGHT_CODE:
         moveRight();
-      break;
+        break;
+      default:
+      console.log(e.which);
     }
   });
 

@@ -1,3 +1,23 @@
+/**
+ * Asocia los diferentes scripts controladores asociados a botones
+ * del documento HTML
+ */
+function iniciarScripts(){
+  $("#movesquerra").click((e)=>{
+    moveLeft();
+  })
+  $("#movdreta").click((e)=>{
+    moveRight();
+  })
+  $("#movendavant").click((e)=>{
+    moveUp();
+  })
+  $("#movendarrere").click((e)=>{
+    moveDown();
+  })
+}
+
+
 /* No tocar código */
 var partida = {};
 var vidaPlayer = 10;
@@ -89,6 +109,8 @@ var enano = {
 
 /* Se llama al cargar todos los elementos de la página */
 window.onload = function () {
+  iniciarScripts();
+  bindKeyCodes();
   iniciarJuego();
 };
 
@@ -120,7 +142,7 @@ function compruebaPared(x, y){
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveUp() {
-  console.log("down");
+  console.log("up");
   switch (player.estadoPartida.direccion){
     case 0:
         if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
@@ -162,6 +184,7 @@ function moveUp() {
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveDown() {
+  console.log("down");
   switch (player.estadoPartida.direccion){
     case 0:
         if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
@@ -203,6 +226,7 @@ function moveDown() {
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveRight() {
+  console.log("right");
   player.estadoPartida.direccion++;
   if(player.estadoPartida.direccion == 4){
     player.estadoPartida.direccion = 0;
@@ -215,6 +239,7 @@ function moveRight() {
  * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
 function moveLeft() {
+  console.log("left");
   player.estadoPartida.direccion--;
   if(player.estadoPartida.direccion == 0){
     player.estadoPartida.direccion = 3;
