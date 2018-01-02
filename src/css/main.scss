@@ -1,8 +1,10 @@
 $font-stack: Arial, Helvetica, sans-serif;
 $backgroundcolour: #a9f5d0;
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P:400);
 
 body {
     background-image: url("../media/finales/background.jpg");
+    font-family: 'Press Start 2P', cursive;
 }
 
 #navegacion {

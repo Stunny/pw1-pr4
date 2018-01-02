@@ -61,3 +61,10 @@ function bindKeyCodes(){
 
   return true;
 }
+
+/**
+ * Lleva a cabo la creación del personaje
+ */
+function initPlayer(){
+
+}

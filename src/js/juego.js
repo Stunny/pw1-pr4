@@ -109,6 +109,7 @@ var enano = {
 
 /* Se llama al cargar todos los elementos de la página */
 window.onload = function () {
+  initPlayer();
   iniciarScripts();
   bindKeyCodes();
   iniciarJuego();
