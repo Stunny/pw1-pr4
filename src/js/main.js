@@ -1,4 +1,3 @@
-
 /* Inicializar el juego */
 function iniciarJuego() {
   loadMap(-3);
@@ -40,31 +39,56 @@ function mapaToImg(x, y) {
  */
 function bindKeyCodes(){
   $(document).keypress((e)=>{
-    console.log("key pressed");
-    switch(e.which){
-      case window.gameConstants.MOVE_DOWN_CODE:
-        moveDown();
-        break;
-      case window.gameConstants.MOVE_UP_CODE:
-        moveUp();
-        break;
-      case window.gameConstants.MOVE_LEFT_CODE:
-        moveLeft();
-        break;
-      case window.gameConstants.MOVE_RIGHT_CODE:
-        moveRight();
-        break;
-      default:
-      console.log(e.which);
+    if(GameData.gameStarted){
+      console.log("key pressed");
+      switch(e.which){
+        case GameData.gameConstants.MOVE_DOWN_CODE:
+          moveDown();
+          break;
+        case GameData.gameConstants.MOVE_UP_CODE:
+          moveUp();
+          break;
+        case GameData.gameConstants.MOVE_LEFT_CODE:
+          moveLeft();
+          break;
+        case GameData.gameConstants.MOVE_RIGHT_CODE:
+          moveRight();
+          break;
+        default:
+        console.log(e.which);
+      }
     }
   });
 
   return true;
 }
 
-/**
- * Lleva a cabo la creación del personaje
- */
-function initPlayer(){
 
+/**
+ * Asocia los diferentes scripts controladores asociados a botones
+ * del documento HTML
+ */
+function iniciarScripts(){
+  GameData.canvas = $('#visor');
+
+  $("#startGame").click((e)=>{
+    initPlayer();
+  });
+
+  $("#movesquerra").click((e)=>{
+    if(GameData.gameStarted)
+      moveLeft();
+  })
+  $("#movdreta").click((e)=>{
+    if(GameData.gameStarted)
+      moveRight();
+  })
+  $("#movendavant").click((e)=>{
+    if(GameData.gameStarted)
+      moveUp();
+  })
+  $("#movendarrere").click((e)=>{
+    if(GameData.gameStarted)
+      moveDown();
+  })
 }

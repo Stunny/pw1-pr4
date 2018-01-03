@@ -1,20 +1,12 @@
 /**
- * Asocia los diferentes scripts controladores asociados a botones
- * del documento HTML
+ * Lleva a cabo la creación del personaje
  */
-function iniciarScripts(){
-  $("#movesquerra").click((e)=>{
-    moveLeft();
-  })
-  $("#movdreta").click((e)=>{
-    moveRight();
-  })
-  $("#movendavant").click((e)=>{
-    moveUp();
-  })
-  $("#movendarrere").click((e)=>{
-    moveDown();
-  })
+function initPlayer(){
+  if(confirm('Empecemos! ¿Listo?')){
+    player.nombre = prompt("Empecemos por conocerte un poco. ¿Cómo te llamas?", "");
+    console.log(player.nombre);
+    iniciarJuego();
+  }
 }
 
 
@@ -108,12 +100,12 @@ var enano = {
 };
 
 /* Se llama al cargar todos los elementos de la página */
-window.onload = function () {
-  initPlayer();
+$(document).ready (function () {
+  GameData.gameStarted  = false;
   iniciarScripts();
   bindKeyCodes();
-  iniciarJuego();
-};
+
+});
 
 /*  Pinta imagen en el visor */
 function pintaImagen(src, x, y) {

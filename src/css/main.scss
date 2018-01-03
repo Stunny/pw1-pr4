@@ -18,10 +18,15 @@ body {
   a{
     padding: .5em;
     text-decoration: none;
+    color: #e27924
   };
   a:visited{
-    color: white
+    color: #e27924
   }
+}
+
+#startGame:hover, #saveGame:hover{
+  color: white
 }
 
 #navegacion {
@@ -37,7 +42,12 @@ body {
   float:right;
   margin: 1em;
   top: 1em;
-  right: 0
+  right: 0;
+  p{
+    span{
+      color:#e27924;
+    }
+  }
 }
 
 h1{
@@ -57,6 +67,7 @@ nav{
       float: left;
       display: block;
       text-align: center;
+      color: #e27924
 
     }
   }
