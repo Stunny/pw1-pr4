@@ -96,7 +96,7 @@ var humano = {
   defensa:3,
   xp:0,
   img:"",
-mochila:[objetos.palo]
+  mochila:[objetos.palo]
 };
 
 var enano = {

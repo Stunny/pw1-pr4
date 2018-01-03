@@ -22,4 +22,9 @@ gulp.task('mincss', ()=>{
   .pipe(gulp.dest('./build/css/'));
 });
 
-gulp.task('default', ['html', 'obfjs', 'mincss']);
+gulp.task('imgs', ()=>{
+  return gulp.src('./src/media/finales/*')
+  .pipe(gulp.dest('./build/img/'));
+});
+
+gulp.task('default', ['html', 'obfjs', 'mincss', 'imgs']);
