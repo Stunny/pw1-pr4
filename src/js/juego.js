@@ -100,6 +100,30 @@ $(document).ready (function () {
   bindKeyCodes();
 });
 
+function loadRaceDialog(){
+  var humanImg, elfImg, dwarfImg;
+
+  humanImg = $("#select-human").find("img");
+  elfImg = $("#select-elf").find("img");
+  dwarfImg = $("#select-dwarf").find("img");
+
+  //Cargar imagenes del dialog de selesccion de raza
+  humanImg.attr('src', './img/race-human.png');
+  elfImg.attr('src', './img/race-elf.png');
+  dwarfImg.attr('src', './img/race-dwarf.png');
+
+  //Asignar los handlers que se encargaran de ver que raza se escoge
+  humanImg.click(()=>{
+    selectChaaracter("human");
+  });
+  elfImg.click(()=>{
+    selectChaaracter("elf");
+  });
+  dwarfImg.click(()=>{
+    selectChaaracter("dwarf");
+  });
+}
+
 /**
  * Lleva a cabo la creación del personaje
  */
@@ -113,15 +137,18 @@ function initPlayer(){
     //************************Seleccion Tipo de personaje****************************//
     confirm("Ahora escogeremos la raza con la que quieras jugar");
 
-    //Cargar imagenes del dialog de selesccion de raza
-    $("#select-human").find("img").attr('src', './img/race-human.png');
-    $("#select-elf").find("img").attr('src', './img/race-elf.png');
-    $("#select-dwarf").find("img").attr('src', './img/race-dwarf.png');
-
+    loadRaceDialog();
     $("#race-dialog").dialog('open');
-
-    iniciarJuego();
   }
+}
+
+function selectChaaracter(type){
+  $("#race-dialog").dialog('close');
+  player.personaje = type === "human"? humano
+                    : type=== "elf"? elfo
+                    : enano;
+
+  iniciarJuego();
 }
 
 /*  Pinta imagen en el visor */
