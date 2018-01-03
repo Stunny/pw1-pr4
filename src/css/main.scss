@@ -72,3 +72,16 @@ nav{
     }
   }
 }
+
+#race-dialog{
+  ul{
+    list-style-type: none;
+    li{
+      display: inline;
+      padding: 1em;
+      img{
+        max-width: 100px
+      }
+    }
+  }
+}

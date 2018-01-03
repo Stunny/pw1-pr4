@@ -71,6 +71,15 @@ function bindKeyCodes(){
 function iniciarScripts(){
   GameData.canvas = $('#visor');
 
+  //Inicializacion del dialog de seleccion de raza
+  $("#race-dialog").dialog({
+      autoOpen: false,
+      modal:true,
+      close:()=>{
+        $("#race-dialog").hide();
+      }
+  });
+
   $("#startGame").click((e)=>{
     initPlayer();
   });

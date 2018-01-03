@@ -1,15 +1,3 @@
-/**
- * Lleva a cabo la creación del personaje
- */
-function initPlayer(){
-  if(confirm('Empecemos! ¿Listo?')){
-    player.nombre = prompt("Empecemos por conocerte un poco. ¿Cómo te llamas?", "");
-    console.log(player.nombre);
-    iniciarJuego();
-  }
-}
-
-
 /* No tocar código */
 var partida = {};
 var vidaPlayer = 10;
@@ -33,6 +21,7 @@ var objetos = {
 };
 
 //TODO: IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
+//***************************TIPOS DE ENEMIGO*********************************//
 var goblin = {
   vida:5,
   ataque:2,
@@ -59,6 +48,9 @@ var araña = {
   img:"",
   objetos:[]
 };
+
+
+//***************************TIPOS DE PERSONAJE*******************************//
 
 var player = {
   nombre:"",
@@ -99,13 +91,38 @@ var enano = {
   mochila:[objetos.casco]
 };
 
-/* Se llama al cargar todos los elementos de la página */
+//***************************FUNCIONALIDADES DEL JUEGO************************//
+
+/* Inicializacion de scripts y listeners */
 $(document).ready (function () {
   GameData.gameStarted  = false;
   iniciarScripts();
   bindKeyCodes();
-
 });
+
+/**
+ * Lleva a cabo la creación del personaje
+ */
+function initPlayer(){
+  if(confirm('Empecemos! ¿Listo?')){
+    //Nombre y sexo
+    player.nombre = prompt("Empecemos por conocerte un poco. ¿Cómo te llamas?", "");
+    let sex = prompt("¿Eres un chico, una chica, o te consideras otra cosa y no aceptas la realidadd?", "");
+    $("#namesex").text ( player.nombre + "/" +sex);
+
+    //************************Seleccion Tipo de personaje****************************//
+    confirm("Ahora escogeremos la raza con la que quieras jugar");
+
+    //Cargar imagenes del dialog de selesccion de raza
+    $("#select-human").find("img").attr('src', './img/race-human.png');
+    $("#select-elf").find("img").attr('src', './img/race-elf.png');
+    $("#select-dwarf").find("img").attr('src', './img/race-dwarf.png');
+
+    $("#race-dialog").dialog('open');
+
+    iniciarJuego();
+  }
+}
 
 /*  Pinta imagen en el visor */
 function pintaImagen(src, x, y) {

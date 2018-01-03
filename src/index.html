@@ -6,11 +6,16 @@
   <meta charset="UTF-8">
   <meta name="description" content="Dungeon Master AJAX Game" />
   <meta name="keywords" content="dungeon, ajax, javascript, css" />
-  <meta name="author" content="Daniel Amo" />
+  <meta name="author" content="Angel Farre, Rafael  Rebollo, Alex Vogel" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="stylesheet" href="css/main.css" type="text/css" media="all" />
   <link href='https://fonts.googleapis.com/css?family=Press+Start+2P:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css" type="text/css">
+
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
   <script src="js/juego.js" type="text/javascript"></script>
   <script src="js/main.js" type="text/javascript"></script>
@@ -43,13 +48,20 @@
   </section>
   <section id="equipocarac">
     <h2>Equipo & Características</h2>
-    <p>Nombre/Sexo: <span></span></p>
-    <p>Nivel: <span></span></p>
-    <p>Ataque: <span></span></p>
-    <p>Defensa: <span></span></p>
-    <p>Vida: <span></span></p>
-    <p>Objetos: <span></span></p>
+    <p>Nombre/Sexo: <span id="namesex"></span></p>
+    <p>Nivel: <span id=" level"></span></p>
+    <p>Ataque: <span id="atac"></span></p>
+    <p>Defensa: <span id=" protec"></span></p>
+    <p>Vida: <span id="lifepoints"></span></p>
+    <p>Objetos: <span id="objcts"></span></p>
   </section>
+  <div id="race-dialog" title="Selecciona tu raza">
+    <ul>
+      <li id="select-human"><img src="" alt="Human Warrior"></li>
+      <li id="select-elf"><img src="" alt="Elf Rogue"></li>
+      <li id="select-dwarf"><img src="" alt="Mountain Dwarf"></li>
+    </ul>
+  </div>
 </body>
 
 </html>
