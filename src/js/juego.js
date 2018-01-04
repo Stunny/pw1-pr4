@@ -8,16 +8,16 @@ var vidaPlayer = 10;
 var mapa = [];
 
 var objetos = {
-  piedra: {ataque:1, defensa:0, hp:0},
-  palo: {ataque:2, defensa:0, hp:0},
-  daga: {ataque:5, defensa:0, hp:0},
-  escudo: {ataque:0, defensa:3, hp:0},
-  casco: {ataque:0, defensa:2, hp:0},
-  peto: {ataque:0, defensa:5, hp:0},
-  pocion: {ataque:0, defensa:0, hp:vidaPlayer/2},
-  lembas: {ataque:0, defensa:0, hp:vidaPlayer},
-  vendas: {ataque:0, defensa:0, hp:5},
-  flor: {ataque:0, defensa:0, hp:0}
+  piedra: {nombre: "piedra",ataque:1, defensa:0, hp:0},
+  palo: {nombre: "palo",ataque:2, defensa:0, hp:0},
+  daga: {nombre: "daga",ataque:5, defensa:0, hp:0},
+  escudo: {nombre: "escudo",ataque:0, defensa:3, hp:0},
+  casco: {nombre: "casco",ataque:0, defensa:2, hp:0},
+  peto: {nombre: "peto",ataque:0, defensa:5, hp:0},
+  pocion: {nombre: "pocion",ataque:0, defensa:0, hp:vidaPlayer/2},
+  lembas: {nombre: "lembas",ataque:0, defensa:0, hp:vidaPlayer},
+  vendas: {nombre: "vendas",ataque:0, defensa:0, hp:5},
+  flor: {nombre: "flor",ataque:0, defensa:0, hp:0}
 };
 
 //TODO: IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
@@ -68,26 +68,23 @@ var player = {
 };
 
 var elfo = {
-  ataque:4,
-  defensa:4,
+  ataque:0,
+  defensa:0,
   xp:0,
-  img:"",
   mochila:[objetos.lembas]
 };
 
 var humano = {
-  ataque:5,
-  defensa:3,
+  ataque:0,
+  defensa:0,
   xp:0,
-  img:"",
   mochila:[objetos.palo]
 };
 
 var enano = {
-  ataque:6,
-  defensa:2,
+  ataque:0,
+  defensa:0,
   xp:0,
-  img:"",
   mochila:[objetos.casco]
 };
 
@@ -169,7 +166,7 @@ function pintaImagen(src, x, y) {
   var canvas = document.getElementById('visor');
   var context = canvas.getContext('2d');
   var base_image = new Image();
-  base_image.src = "./media/images/"+src;
+  base_image.src = "./img/"+src;
   base_image.onload = function () {
     // Pinta imagen en el canvas
     context.drawImage(this, x, y);

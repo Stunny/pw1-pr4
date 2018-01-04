@@ -1,7 +1,24 @@
 /* Inicializar el juego */
 function iniciarJuego() {
+  //generacion del primer piso
   loadMap(-3);
-  /* TODO */
+
+  //actualizacion de la UI
+  player.nivel = 1;
+  $("#level").text(player.nivel);
+
+  player.personaje.xp = 0;
+  $("#xpr").text(player.personaje.xp);
+
+  $("#atac").text(player.personaje.ataque);
+
+  console.log($("#protec").text(player.personaje.defensa));
+
+  $("#lifepoints").text(vidaPlayer);
+
+  $("#objcts").text(player.personaje.mochila[0].nombre);
+
+  //Preparacion de listeners y minimapa
 }
 
 /**
