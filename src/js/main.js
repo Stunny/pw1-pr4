@@ -7,6 +7,7 @@ function iniciarJuego() {
 /**
  * Carga el mapa correspondiente y lo devuelve en una matriz
  * @return {[type]} Matriz con todos los elementos del mapa cargados
+ * TODO: generacion de mapa
  */
 function loadMap(mapa){
   switch(mapa){
@@ -77,7 +78,11 @@ function iniciarScripts(){
       modal:true,
       close:()=>{
         $("#race-dialog").hide();
-      }
+      },
+      height: 380,
+      width: 750,
+      modal: true,
+      draggable: false
   });
 
   $("#startGame").click((e)=>{

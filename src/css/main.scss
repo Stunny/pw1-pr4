@@ -47,6 +47,10 @@ body {
     span{
       color:#e27924;
     }
+  };
+  p.avatar{
+    img{display: none};
+    text-align: center;
   }
 }
 
@@ -73,15 +77,12 @@ nav{
   }
 }
 
-#race-dialog{
-  ul{
-    list-style-type: none;
-    li{
-      display: inline;
-      padding: 1em;
-      img{
-        max-width: 100px
-      }
+#img-avatar{
+  max-width: 150px
+}
+
+.ui-dialog .ui-dialog-content{
+    img{
+      max-width: 150px
     }
-  }
 }

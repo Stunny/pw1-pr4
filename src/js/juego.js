@@ -144,10 +144,22 @@ function initPlayer(){
 
 function selectChaaracter(type){
   $("#race-dialog").dialog('close');
-  player.personaje = type === "human"? humano
-                    : type=== "elf"? elfo
-                    : enano;
 
+  switch(type){
+    case 'human':
+      player.personaje = humano;
+      $("#img-avatar").attr('src', 'img/race-human.png');
+    break;
+    case 'elf':
+      player.personaje = elfo;
+      $("#img-avatar").attr('src', 'img/race-elf.png');
+    break;
+    case 'dwarf':
+      player.personaje = enano;
+      $("#img-avatar").attr('src', 'img/race-dwarf.png');
+    break;
+  }
+  $("#img-avatar").css("display", "block");
   iniciarJuego();
 }
 

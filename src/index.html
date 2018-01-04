@@ -30,8 +30,10 @@
     <h1>Dungeon Master AJAX Game</h1>
     <nav>
       <ul>
-        <li id="startGame">Comenzar partida</li>
+        <li id="startGame">Nueva partida</li>
+        <li id="loadGame">Cargar Partida</li>
         <li id="saveGame">Guardar partida</li>
+        <li id="deleteGame">Eliminar partida</li>
       </ul>
     </nav>
   </head>
@@ -48,28 +50,30 @@
   </section>
   <section id="equipocarac">
     <h2>Equipo & Características</h2>
+    <p class="avatar"><img src="" alt="avatar" id="img-avatar"></p>
     <p>Nombre/Sexo: <span id="namesex"></span></p>
-    <p>Nivel: <span id=" level"></span></p>
+    <p>Nivel: <span id="level"></span></p>
+    <p>XP: <span id="xpr"></span></p>
     <p>Ataque: <span id="atac"></span></p>
     <p>Defensa: <span id=" protec"></span></p>
     <p>Vida: <span id="lifepoints"></span></p>
     <p>Objetos: <span id="objcts"></span></p>
   </section>
   <div id="race-dialog" title="Selecciona tu raza">
-    <ul>
-      <li id="select-human">
+    <p class="dialog-content">
+      <span id="select-human">
         <img src="" alt="Human Warrior">
-        <p>HUMANO</p>
-      </li>
-      <li id="select-elf">
+        HUMANO
+      </span>
+      <span id="select-elf">
         <img src="" alt="Elf Rogue">
-        <p>ELFO</p>
-      </li>
-      <li id="select-dwarf">
+        ELFO
+      </span>
+      <span id="select-dwarf">
         <img src="" alt="Mountain Dwarf">
-        <p>ENANO</p>
-      </li>
-    </ul>
+        ENANO
+      </span>
+    </p>
   </div>
 </body>
 
