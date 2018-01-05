@@ -25,7 +25,8 @@ body {
   }
 }
 
-#startGame:hover, #saveGame:hover{
+#startGame:hover, #saveGame:hover, #loadGame:hover,
+#deleteGame:hover{
   color: white
 }
 
@@ -67,7 +68,7 @@ nav{
     overflow: hidden;
     padding: 1em;
     li{
-      width: 50%;
+      width: 25%;
       float: left;
       display: block;
       text-align: center;

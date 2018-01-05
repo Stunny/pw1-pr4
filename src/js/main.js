@@ -1,8 +1,5 @@
 /* Inicializar el juego */
 function iniciarJuego() {
-  //generacion del primer piso
-  loadMap(-3);
-
   //actualizacion de la UI
   player.nivel = 1;
   $("#level").text(player.nivel);
@@ -18,7 +15,12 @@ function iniciarJuego() {
 
   $("#objcts").text(player.personaje.mochila[0].nombre);
 
-  //Preparacion de listeners y minimapa
+  //generacion del primer piso
+  loadMap(-3);
+
+  //Establecer listeners de enemigos y de objetos
+
+  
 }
 
 /**

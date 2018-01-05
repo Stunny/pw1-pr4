@@ -20,7 +20,7 @@ var objetos = {
   flor: {nombre: "flor",ataque:0, defensa:0, hp:0}
 };
 
-//TODO: IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
+//IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
 //***************************TIPOS DE ENEMIGO*********************************//
 var goblin = {
   vida:5,
@@ -173,9 +173,29 @@ function pintaImagen(src, x, y) {
   };
 }
 
-/* Pinta al visor lo que hay en el mapa */
+/* Pinta al visor lo que el jugador tiene delante en el mapa */
+/**
+ * [pintaPosicion description]
+ * @param  {[type]} x Coordenada x del jugador
+ * @param  {[type]} y Coordenada y del jugador
+ */
 function pintaPosicion(x, y) {
-  pintaImagen(mapaToImg(x, y), 0, 0);
+  var pintarX = x, pintarY = y;
+  switch(player.estadoPartida.direccion){
+    case 0:
+      pintarY--;
+    break;
+    case 1:
+      pintarY++;
+    break;
+    case 2:
+      pintarX++;
+    break;
+    case 3:
+      pintarY--;
+    break;
+  }
+  pintaImagen(mapaToImg(pintarX, pintarY), 0, 0);
 }
 
 /*Comprueba que al moverse no haya una pared */
@@ -193,6 +213,7 @@ function moveUp() {
     case 0:
         if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
           player.estadoPartida.y--;
+          pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
           return true;
         }else{
           return false;
@@ -201,6 +222,7 @@ function moveUp() {
     case 1:
       if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
         player.estadoPartida.y++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         return true;
       }else{
         return false;
@@ -209,6 +231,7 @@ function moveUp() {
     case 2:
       if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
         player.estadoPartida.x++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         return true;
       }else{
         return false;
@@ -217,6 +240,7 @@ function moveUp() {
     case 3:
       if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
         player.estadoPartida.x--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         return true;
       }else{
         return false;
@@ -235,6 +259,7 @@ function moveDown() {
     case 0:
         if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
           player.estadoPartida.y++;
+          pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
           return true;
         }else{
           return false;
@@ -243,6 +268,7 @@ function moveDown() {
     case 1:
       if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
         player.estadoPartida.y--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         return true;
       }else{
         return false;
@@ -251,6 +277,7 @@ function moveDown() {
     case 2:
       if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
         player.estadoPartida.x--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         return true;
       }else{
         return false;
@@ -259,6 +286,7 @@ function moveDown() {
     case 3:
       if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
         player.estadoPartida.x++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         return true;
       }else{
         return false;
@@ -277,6 +305,7 @@ function moveRight() {
   if(player.estadoPartida.direccion == 4){
     player.estadoPartida.direccion = 0;
   }
+  pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
   return true;
 }
 
@@ -290,5 +319,6 @@ function moveLeft() {
   if(player.estadoPartida.direccion == 0){
     player.estadoPartida.direccion = 3;
   }
+  pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
   return true;
 }
