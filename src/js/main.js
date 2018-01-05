@@ -76,29 +76,29 @@ function loadMap(mapa){
  *  cosa u otra
 */
 function mapaToImg(x, y) {
-  let casilla = mapa[x][y];
+  let casilla = mapa[y][x];
   let imgSrc;
   switch(casilla){
     case 'W': //Trollwall
-      imgSrc = './img/trollwall.png';
+      imgSrc = '/pasillo.png';
     break;
     case 'P': //Pared visible
-      imgSrc = './img/trollwall.png';
+      imgSrc = '/wall.png';
     break;
     case 'E'://ENEMIGO
-      imgSrc = './img/enemy.png';
+      imgSrc = '/enemy.png';
     break;
     case 'O'://Objeto
-      imgSrc = './img/object.png';
+      imgSrc = '/object.png';
     break;
     case 'I'://Entrada
-      imgSrc = './img/entrance.png';
+      imgSrc = '/eingang.png';
     break;
     case 'S'://Salida
-      imgSrc = './img/trollwall.png';
+      imgSrc = '/ausgang.png';
     break;
     default:
-      imgSrc = './img/trollwall.png';
+      imgSrc = '/pasillo.png';
     break;
   }
   return imgSrc;

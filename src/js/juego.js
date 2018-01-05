@@ -63,7 +63,7 @@ var player = {
     x:0,
     y:0,
     nivel:-3,
-    direccion:0, /* 0 Norte, 1 Sud, 2 Este, 3 Oeste*/
+    direccion:0, /* 0 Norte, 1 Este, 2 Sur, 3 Oeste*/
   }
 };
 
@@ -186,16 +186,41 @@ function pintaPosicion(x, y) {
       pintarY--;
     break;
     case 1:
-      pintarY++;
-    break;
-    case 2:
       pintarX++;
     break;
+    case 2:
+      pintarY++;
+    break;
     case 3:
-      pintarY--;
+      pintarX--;
     break;
   }
   pintaImagen(mapaToImg(pintarX, pintarY), 0, 0);
+}
+
+/**
+ * Comprueba si la casilla en la que se encuentra el jugador debe ejecutar
+ * alguna interaccion de combate/salida/recoger objeto
+ */
+function checkInteraction(){
+  let playerPosX = player.estadoPartida.x;
+  let playerPosY = player.estadoPartida.y;
+
+  switch(mapa[playerPosY][playerPosX]){
+    case "E"://CAsilla de enemigo: activar combate
+
+    break;
+
+    case "O": //Casilla de objeto: interfaz de recogida de objeto
+
+    break;
+
+    case "S": //Puerta de salida: siguiente nivel
+
+    break;
+
+    default: break;
+  }
 }
 
 /*Comprueba que al moverse no haya una pared */
@@ -220,25 +245,25 @@ function moveUp() {
         if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
           player.estadoPartida.y--;
           pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-          return true;
+          break;
         }else{
           return false;
         }
       break;
     case 1:
-      if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
-        player.estadoPartida.y++;
+      if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+        player.estadoPartida.x++;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-        return true;
+        break;
       }else{
         return false;
       }
       break;
     case 2:
-      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
-        player.estadoPartida.x++;
+      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
+        player.estadoPartida.y++;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-        return true;
+        break;
       }else{
         return false;
       }
@@ -247,12 +272,14 @@ function moveUp() {
       if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
         player.estadoPartida.x--;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-        return true;
+        break;
       }else{
         return false;
       }
       break;
   }
+
+  checkInteraction();
 }
 
 /**
@@ -266,25 +293,25 @@ function moveDown() {
         if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
           player.estadoPartida.y++;
           pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-          return true;
+          break;
         }else{
           return false;
         }
       break;
     case 1:
       if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
-        player.estadoPartida.y--;
+        player.estadoPartida.x--;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-        return true;
+        break;
       }else{
         return false;
       }
       break;
     case 2:
       if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
-        player.estadoPartida.x--;
+        player.estadoPartida.y--;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-        return true;
+        break;
       }else{
         return false;
       }
@@ -293,12 +320,14 @@ function moveDown() {
       if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
         player.estadoPartida.x++;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-        return true;
+        break;
       }else{
         return false;
       }
       break;
   }
+
+  checkInteraction();
 }
 
 /**
@@ -322,7 +351,7 @@ function moveRight() {
 function moveLeft() {
   console.log("left");
   player.estadoPartida.direccion--;
-  if(player.estadoPartida.direccion == 0){
+  if(player.estadoPartida.direccion == -1){
     player.estadoPartida.direccion = 3;
   }
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
