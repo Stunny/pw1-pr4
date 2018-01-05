@@ -60,10 +60,10 @@ var player = {
   manoderecha:"",
   manoizquierda:"",
   estadoPartida: {
-    x:4,
-    y:1,
+    x:0,
+    y:0,
     nivel:-3,
-    direccion:1, /* 0 Norte, 1 Sud, 2 Este, 3 Oeste*/
+    direccion:0, /* 0 Norte, 1 Sud, 2 Este, 3 Oeste*/
   }
 };
 
@@ -199,8 +199,14 @@ function pintaPosicion(x, y) {
 }
 
 /*Comprueba que al moverse no haya una pared */
+/**
+ * @return {boolean} true si la casilla NO es una pared
+ */
 function compruebaPared(x, y){
-
+  if(mapa[y][x] == "P" || mapa[y][x] == "W"){
+    return false;
+  }
+  return true;
 }
 
 /**

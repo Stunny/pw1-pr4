@@ -27,9 +27,4 @@ gulp.task('imgs', ()=>{
   .pipe(gulp.dest('./build/img/'));
 });
 
-gulp.task('maps', ()=>{
-  return gulp.src('./src/media/maps/*')
-  .pipe(gulp.dest('./build/maps/'));
-});
-
 gulp.task('default', ['html', 'obfjs', 'mincss', 'imgs']);

@@ -1,4 +1,4 @@
-/* Inicializar el juego */
+/* Inicializar el juego por primera vez */
 function iniciarJuego() {
   //actualizacion de la UI
   player.nivel = 1;
@@ -17,20 +17,42 @@ function iniciarJuego() {
 
   //generacion del primer piso
   loadMap(-3);
-
-  //Establecer listeners de enemigos y de objetos
-
-
 }
 
+/**
+ * Almacena en la variable global de mapa los datos del mismo
+ * @param  {[type]} map texto plano del mapa
+ */
 function buildMap(map){
-  console.log(map);
+
+  map = map.split("\n");
+  mapa = [];
+  for(let i = 0; i < 10; i++){
+    mapa.push(map[i].split(""));
+  }
+
+  for(let i = 0; i < 10; i++)
+    for(let j = 0; j < 10; j++){
+      if(mapa[i][j] == "I"){
+        GameData.startPosition = {
+          x: j,
+          y: i
+        };
+      }
+    }
+
+  console.log("MAPA CARGADO");
+  console.log(mapa);
+
+  GameData.gameStarted = true;
+  player.estadoPartida.x = GameData.startPosition.x;
+  player.estadoPartida.y = GameData.startPosition.y;
+  pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
 }
 
 /**
  * Carga el mapa correspondiente y lo devuelve en una matriz
  * @return {[type]} Matriz con todos los elementos del mapa cargados
- * TODO: generacion de mapa
  */
 function loadMap(mapa){
   let rawMap;
