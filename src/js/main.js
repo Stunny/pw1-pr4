@@ -20,7 +20,11 @@ function iniciarJuego() {
 
   //Establecer listeners de enemigos y de objetos
 
-  
+
+}
+
+function buildMap(map){
+  console.log(map);
 }
 
 /**
@@ -29,15 +33,17 @@ function iniciarJuego() {
  * TODO: generacion de mapa
  */
 function loadMap(mapa){
+  let rawMap;
+  let fileSrc;
   switch(mapa){
     case -3:
-
+      buildMap(GameData.gameConstants.maps.map3);
       break;
     case -2:
-
+      buildMap(GameData.gameConstants.maps.map2);
       break;
     case -1:
-
+      buildMap(GameData.gameConstants.maps.map1);
       break;
   }
 
@@ -48,8 +54,32 @@ function loadMap(mapa){
  *  cosa u otra
 */
 function mapaToImg(x, y) {
-
-
+  let casilla = mapa[x][y];
+  let imgSrc;
+  switch(casilla){
+    case 'W': //Trollwall
+      imgSrc = './img/trollwall.png';
+    break;
+    case 'P': //Pared visible
+      imgSrc = './img/trollwall.png';
+    break;
+    case 'E'://ENEMIGO
+      imgSrc = './img/enemy.png';
+    break;
+    case 'O'://Objeto
+      imgSrc = './img/object.png';
+    break;
+    case 'I'://Entrada
+      imgSrc = './img/entrance.png';
+    break;
+    case 'S'://Salida
+      imgSrc = './img/trollwall.png';
+    break;
+    default:
+      imgSrc = './img/trollwall.png';
+    break;
+  }
+  return imgSrc;
 }
 
 /**
@@ -111,17 +141,17 @@ function iniciarScripts(){
   $("#movesquerra").click((e)=>{
     if(GameData.gameStarted)
       moveLeft();
-  })
+  });
   $("#movdreta").click((e)=>{
     if(GameData.gameStarted)
       moveRight();
-  })
+  });
   $("#movendavant").click((e)=>{
     if(GameData.gameStarted)
       moveUp();
-  })
+  });
   $("#movendarrere").click((e)=>{
     if(GameData.gameStarted)
       moveDown();
-  })
+  });
 }

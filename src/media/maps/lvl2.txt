@@ -1,10 +1,10 @@
 PPPPPPPPPP
-P        S
-P        P
-P        P
-P        P
-P        P
-P        P
-P        P
-P        P
-PPPPPIPPPP
+PPP  P  SP
+PPOE P PPP
+PPPP P PPP
+P OP PE  P
+P P   P  P
+PEP P  P P
+P   PP   P
+P PIP  POP
+PPPPPPPPPP
