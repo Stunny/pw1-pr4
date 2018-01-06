@@ -20,6 +20,17 @@ function iniciarJuego() {
 }
 
 /**
+ * Pone en ejecucion la partida cargada desde el webservice
+ */
+function iniciaPartidaCargada(){
+  GameData.gameStarted = true;
+  mapa = partida.map;
+  player = partida.player;
+
+  pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+}
+
+/**
  * Inicializa un nuevo nivel despues de haber superado el primero
  */
 function iniciarNuevoNivel(){
@@ -82,32 +93,109 @@ function iniciarRecogidaDeObjeto(){
 function iniciarCombate(){
   let escape = false;
   if(confirm("Enemigo salvaje apareció! Luchar(Aceptar) o huir(Cancelar)?")){
-    
+
   }
 }
 
 /**
- * TODO: carga una partida guardada en el web service montado en
+ * Carga una partida guardada en el web service montado en
  * el servidor de lasalle
  */
 function loadGame(){
+  let slot;
+  do{
+    slot = prompt("¿Qué slot de partida quieres cargar?", "1 / 2");
+  }while (slot != "1" && slot != "2");
 
+  $.ajaxSetup({
+    headers:{"content-type":"application/json"}
+  });
+
+  let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
+
+  let get = $.ajax({
+    async : true,
+    type : 'get',
+    url: url
+  });
+
+  get.done((game, txtstatus)=>{
+    console.log(txtstatus);
+    partida = JSON.parse(game);
+    alert("Partida cargada! 😁");
+    iniciaPartidaCargada();
+  });
+
+  get.fail((jqxhr, textStatus, errorThrown)=>{
+    console.log(textStatus, errorThrown, errorThrown.msg);
+    if(textStatus == "404"){
+      alert("No hay ninguna partida guardada en ese slot 😓");
+    }
+  });
 }
 
 /**
- * TODO: guarda la partida en su estado actual
- * @return {[type]} [description]
+ * Guarda la partida en su estado actual
  */
 function saveGame(){
+  partida.player = player;
+  partida.map = mapa;
 
+  let slot;
+  do{
+    slot = prompt("¿En que slot de guardado quieres almacenar la partida?", "1 / 2");
+  }while (slot != "1" && slot != "2");
+
+  $.ajaxSetup({
+    headers:{"content-type":"application/json"}
+  });
+  let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
+  let post = $.post(url, JSON.stringify(partida), "application/json");
+
+  post.done((res, txtstatus)=>{
+    console.log(res);
+    console.log(txtstatus);
+    alert("Partida guardada con éxito!");
+  });
+
+  post.fail((jqxhr, textStatus, errorThrown)=>{
+    console.log(textStatus, errorThrown, errorThrown.msg);
+  });
 }
 
 /**
  * Elimina una partida guardada en el webservice
- * @return {[type]} [description]
+ * PLS NO DELET DIS
  */
 function deleteGame(){
+  let slot;
+  do{
+    slot = prompt("¿Qué slot de partida quieres vaciar?", "1 / 2");
+  }while (slot != "1" && slot != "2");
 
+  $.ajaxSetup({
+    headers:{"content-type":"application/json"}
+  });
+
+  let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
+
+  let get = $.ajax({
+    async : true,
+    type : 'delete',
+    url: url
+  });
+
+  get.done((game, txtstatus)=>{
+    console.log(txtstatus);
+    alert("Slot vaciado! 😁");
+  });
+
+  get.fail((jqxhr, textStatus, errorThrown)=>{
+    console.log(textStatus, errorThrown, errorThrown.msg);
+    if(textStatus == "404"|| textStatus == "202"){
+      alert("Este slot ya está vacío!");
+    }
+  });
 }
 
 /**
@@ -184,7 +272,7 @@ function mapaToImg(x, y) {
       imgSrc = '/wall.png';
     break;
     case 'E'://ENEMIGO
-      imgSrc = '/enemy.png';
+      imgSrc = '/goblin.gif';
     break;
     case 'O'://Objeto
       imgSrc = '/object.png';
