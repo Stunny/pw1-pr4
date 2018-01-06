@@ -20,6 +20,27 @@ function iniciarJuego() {
 }
 
 /**
+ * Inicializa un nuevo nivel despues de haber superado el primero
+ */
+function iniciarNuevoNivel(){
+  player.estadoPartida.nivel++;
+  if(player.estadoPartida.nivel == 0){
+    //<TODO:Fin del juego. GANADOR
+  }
+
+  alert("Nivel superado! Empecemos el siguiente.");
+  loadMap(player.estadoPartida.nivel);
+}
+
+function iniciarRecogidaDeObjeto(){
+
+}
+
+function iniciarCombate(){
+  
+}
+
+/**
  * Almacena en la variable global de mapa los datos del mismo
  * @param  {[type]} map texto plano del mapa
  */
@@ -39,6 +60,12 @@ function buildMap(map){
           y: i
         };
       }
+      if(mapa[i][j] == "S"){
+        GameData.exitPosition = {
+          x: j,
+          y: i
+        };
+      }
     }
 
   console.log("MAPA CARGADO");
@@ -47,6 +74,7 @@ function buildMap(map){
   GameData.gameStarted = true;
   player.estadoPartida.x = GameData.startPosition.x;
   player.estadoPartida.y = GameData.startPosition.y;
+  player.estadoPartida.direccion = 0;
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
 }
 
@@ -112,7 +140,6 @@ function mapaToImg(x, y) {
 function bindKeyCodes(){
   $(document).keypress((e)=>{
     if(GameData.gameStarted){
-      console.log("key pressed");
       switch(e.which){
         case GameData.gameConstants.MOVE_DOWN_CODE:
           moveDown();

@@ -205,18 +205,18 @@ function pintaPosicion(x, y) {
 function checkInteraction(){
   let playerPosX = player.estadoPartida.x;
   let playerPosY = player.estadoPartida.y;
-
+  //console.log(mapa[playerPosY][playerPosX]);
   switch(mapa[playerPosY][playerPosX]){
     case "E"://CAsilla de enemigo: activar combate
-
+      iniciarCombate();
     break;
 
     case "O": //Casilla de objeto: interfaz de recogida de objeto
-
+      iniciarRecogidaDeObjeto();
     break;
 
-    case "S": //Puerta de salida: siguiente nivel
-
+    case "S":
+      iniciarNuevoNivel();
     break;
 
     default: break;
