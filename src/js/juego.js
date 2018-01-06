@@ -57,8 +57,8 @@ var player = {
   vida: vidaPlayer,
   nivel:0,
   personaje:null,
-  manoderecha:"",
-  manoizquierda:"",
+  manoderecha:null,
+  manoizquierda:null,
   estadoPartida: {
     x:0,
     y:0,

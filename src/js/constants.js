@@ -1,5 +1,6 @@
 window.GameData  = {};
 GameData.gameConstants = Object.freeze({
+  apiURL: "http://puigpedros.salleurl.edu/pwi/pac4/partida.php",
   apiToken: "ab57560b-1b93-4c99-b527-7ddeb8f38a82",
   MOVE_UP_CODE: 119,
   MOVE_DOWN_CODE: 115,

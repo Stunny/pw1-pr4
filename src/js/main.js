@@ -25,19 +25,89 @@ function iniciarJuego() {
 function iniciarNuevoNivel(){
   player.estadoPartida.nivel++;
   if(player.estadoPartida.nivel == 0){
-    //<TODO:Fin del juego. GANADOR
+    //TODO:Fin del juego. GANADOR
   }
 
   alert("Nivel superado! Empecemos el siguiente.");
   loadMap(player.estadoPartida.nivel);
 }
 
+/**
+ * Genera un objeto random de la pool para recoger por el jugador
+ * @return {string} nombre del objeto
+ */
+function generateObject(){
+
+  let obj = Math.floor(Math.random() * (_.size(objetos) - 1));
+  GameData.currentFoundObj = objetos[Object.keys(objetos)[obj]];
+  return GameData.currentFoundObj.nombre;
+}
+
+/**
+ * Ejecuta el proceso de recoger un objeto del suelo
+ * o pasar de largo
+ * TODO: Mostrar en la UI los objetos de las manos
+ */
 function iniciarRecogidaDeObjeto(){
+  if(confirm("Objeto encontrado! Deseas recoger "+generateObject()+"?")){
+    if(confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")){
+      let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
+      let mano;
+      switch(hand){
+        case "I":
+          mano = player.manoizquierda;
+        break;
+        case "D":
+          mano = player.manoderecha;
+        break;
+      }
+
+      if(mano != null){
+        player.personaje.mochila.push(mano);
+        $("#objcts").text($("#objcts").text()+", "+mano.nombre);
+      }
+      mano = GameData.currentFoundObj;
+
+    }else{
+      player.personaje.mochila.push(GameData.currentFoundObj);
+      $("#objcts").text($("#objcts").text()+", "+GameData.currentFoundObj.nombre);
+    }
+  }
+}
+
+/**
+ * TODO: Ejecuta el proceso de entrar en combate con un enemigo
+ * encontrado por el camino hacia la salida de la planta
+ */
+function iniciarCombate(){
+  let escape = false;
+  if(confirm("Enemigo salvaje apareció! Luchar(Aceptar) o huir(Cancelar)?")){
+    
+  }
+}
+
+/**
+ * TODO: carga una partida guardada en el web service montado en
+ * el servidor de lasalle
+ */
+function loadGame(){
 
 }
 
-function iniciarCombate(){
-  
+/**
+ * TODO: guarda la partida en su estado actual
+ * @return {[type]} [description]
+ */
+function saveGame(){
+
+}
+
+/**
+ * Elimina una partida guardada en el webservice
+ * @return {[type]} [description]
+ */
+function deleteGame(){
+
 }
 
 /**
@@ -185,6 +255,18 @@ function iniciarScripts(){
 
   $("#startGame").click((e)=>{
     initPlayer();
+  });
+
+  $("#loadGame").click((e)=>{
+    loadGame();
+  });
+
+  $("#saveGame").click((e)=>{
+    saveGame();
+  });
+
+  $("#deleteGame").click((e)=>{
+    deleteGame();
   });
 
   $("#movesquerra").click((e)=>{
