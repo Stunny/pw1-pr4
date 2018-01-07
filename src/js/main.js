@@ -1,13 +1,13 @@
 /**
  * Lleva a cabo la creación del personaje
  */
-function initPlayer(){
-  if(confirm('Empecemos! ¿Listo?')){
+function initPlayer() {
+  if (confirm('Empecemos! ¿Listo?')) {
     //Nombre y sexo
     player.nombre = prompt("Empecemos por conocerte un poco. ¿Cómo te llamas?", "");
     let sex = prompt("¿Eres un chico, una chica, o te consideras otra cosa y no aceptas la realidadd?", "");
-    $("#namesex").text ( player.nombre + "/" +sex);
-    player.nombre += '/'+sex;
+    $("#namesex").text(player.nombre + "/" + sex);
+    player.nombre += '/' + sex;
     //************************Seleccion Tipo de personaje****************************//
     confirm("Ahora escogeremos la raza con la que quieras jugar");
 
@@ -19,7 +19,7 @@ function initPlayer(){
 /**
  * Carga el dialog de seleccion de personaje
  */
-function loadRaceDialog(){
+function loadRaceDialog() {
   var humanImg, elfImg, dwarfImg;
 
   humanImg = $("#select-human").find("img");
@@ -32,13 +32,13 @@ function loadRaceDialog(){
   dwarfImg.attr('src', './img/race-dwarf.png');
 
   //Asignar los handlers que se encargaran de ver que raza se escoge
-  humanImg.click(()=>{
+  humanImg.click(() => {
     selectChaaracter("human");
   });
-  elfImg.click(()=>{
+  elfImg.click(() => {
     selectChaaracter("elf");
   });
-  dwarfImg.click(()=>{
+  dwarfImg.click(() => {
     selectChaaracter("dwarf");
   });
 }
@@ -47,21 +47,21 @@ function loadRaceDialog(){
  * LLeva a cabo la funcionalidad de seleccion de personaje
  * @param  {string} type Tipo de personaje{"human","elf","dwarf"}
  */
-function selectChaaracter(type){
+function selectChaaracter(type) {
   $("#race-dialog").dialog('close');
 
-  switch(type){
+  switch (type) {
     case 'human':
       player.personaje = humano;
-    break;
+      break;
     case 'elf':
       player.personaje = elfo;
-    break;
+      break;
     case 'dwarf':
       player.personaje = enano;
-    break;
+      break;
   }
-  $("#img-avatar").attr('src', 'img/'+player.personaje.img);
+  $("#img-avatar").attr('src', 'img/' + player.personaje.img);
   $("#img-avatar").css("display", "block");
   iniciarJuego();
 }
@@ -90,19 +90,19 @@ function iniciarJuego() {
 /**
  * Pone en ejecucion la partida cargada desde el webservice
  */
-function iniciaPartidaCargada(){
+function iniciaPartidaCargada() {
   GameData.gameStarted = true;
   mapa = partida.map;
   player = partida.player;
 
-  $("#namesex").text (player.nombre);
+  $("#namesex").text(player.nombre);
   $("#level").text(player.nivel);
   $("#xpr").text(player.personaje.xp);
   $("#atac").text(player.personaje.ataque);
   $("#protec").text(player.personaje.defensa);
   $("#lifepoints").text(vidaPlayer);
   $("#objcts").text(player.personaje.mochila[0].nombre);
-  $("#img-avatar").attr('src', 'img/'+player.personaje.img);
+  $("#img-avatar").attr('src', 'img/' + player.personaje.img);
 
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
 }
@@ -110,9 +110,9 @@ function iniciaPartidaCargada(){
 /**
  * Inicializa un nuevo nivel despues de haber superado el primero
  */
-function iniciarNuevoNivel(){
+function iniciarNuevoNivel() {
   player.estadoPartida.nivel++;
-  if(player.estadoPartida.nivel == 0){
+  if (player.estadoPartida.nivel == 0) {
     //TODO:Fin del juego. GANADOR
   }
 
@@ -124,7 +124,7 @@ function iniciarNuevoNivel(){
  * Genera un objeto random de la pool para recoger por el jugador
  * @return {string} nombre del objeto
  */
-function generateObject(){
+function generateObject() {
 
   let obj = Math.floor(Math.random() * (_.size(objetos) - 1));
   GameData.currentFoundObj = objetos[Object.keys(objetos)[obj]];
@@ -136,29 +136,29 @@ function generateObject(){
  * o pasar de largo
  * TODO: Mostrar en la UI los objetos de las manos
  */
-function iniciarRecogidaDeObjeto(){
-  if(confirm("Objeto encontrado! Deseas recoger "+generateObject()+"?")){
-    if(confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")){
+function iniciarRecogidaDeObjeto() {
+  if (confirm("Objeto encontrado! Deseas recoger " + generateObject() + "?")) {
+    if (confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")) {
       let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
       let mano;
-      switch(hand){
+      switch (hand) {
         case "I":
           mano = player.manoizquierda;
-        break;
+          break;
         case "D":
           mano = player.manoderecha;
-        break;
+          break;
       }
 
-      if(mano != null){
+      if (mano != null) {
         player.personaje.mochila.push(mano);
-        $("#objcts").text($("#objcts").text()+", "+mano.nombre);
+        $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
       }
       mano = GameData.currentFoundObj;
 
-    }else{
+    } else {
       player.personaje.mochila.push(GameData.currentFoundObj);
-      $("#objcts").text($("#objcts").text()+", "+GameData.currentFoundObj.nombre);
+      $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);
     }
   }
 }
@@ -167,12 +167,114 @@ function iniciarRecogidaDeObjeto(){
  * TODO: Ejecuta el proceso de entrar en combate con un enemigo
  * encontrado por el camino hacia la salida de la planta
  */
-function iniciarCombate(){
+function iniciarCombate() {
   let escape = false;
-  if(confirm("Enemigo salvaje apareció! Luchar(Aceptar) o huir(Cancelar)?")){
+  let looted = false;
+  $("#attackbutton").css("display", "block");
+
+  alert("Goblin Vida= "+goblin.vida+"\nAtaque enemy: "+goblin.ataque);
+  alert("Player Vida= "+vidaPlayer+"\nAtaque player: "+player.personaje.ataque);
+
+
+
+  if (confirm("Enemigo salvaje apareció! Luchar(Aceptar) o huir(Cancelar)?")) {
+
+    while (!escape || goblin.vida <= 0) {
+
+      if (goblin.vida == 0) {
+        alert("El enemigo ha muerto!");
+
+        if (!looted) {
+          player.personaje.mochila.push(generateObject());
+          $("#objcts").text($("#objcts").text() + ", " + generateObject());
+          alert("Objeto looteado!");
+          looted = true;
+        }
+        escape = true;
+
+      } else {
+
+        if (goblin.vida - (player.personaje.ataque - goblin.defensa) < 0) {
+
+          if (confirm("Ataque fallado! Ataca el enemigo!")) {
+
+            if (vidaPlayer - (goblin.ataque - player.personaje.defensa) < 0) {
+
+              if (confirm("Ataque fallado! Ataca!")) {
+
+              }else{
+                escape = true;
+              }
+
+            }else{
+              vidaPlayer =- (vidaPlayer - player.personaje.defensa);
+              alert("El enemigo tiene "+vidaPlayer+" de vida!");
+
+              if(vidaPlayer <= 0){
+
+                alert("Te han matao");
+                GameData.gameStarted = false;
+              }
+            }
+
+          }else{
+            escape = true;
+          }
+
+        }else{
+          goblin.vida =- (player.personaje.ataque - goblin.defensa);
+          alert("El enemigo tiene "+goblin.vida+" de vida!");
+        }
+      }
+    }
+
+  } else {
+    escape = true;
 
   }
+
 }
+
+
+
+
+
+
+//$("#attackbutton").css("display", "block");
+//alert("Ataca!");
+//alert(goblin.vida);
+//alert(vidaPlayer);
+
+/*$("#attackbutton").click(function() {
+      if(goblin.vida == 0){
+        alert("El enemigo ha muerto!");
+        player.personaje.mochila.push(generateObject());
+
+      }else{
+
+        while (vidaPlayer == 0 || goblin.vida == 0) {
+          if(player.personaje.ataque - goblin.defensa < 0){
+            alert("Ataque fallado! Ataca el enemigo!");
+
+            if(goblin.ataque - player.personaje.defensa < 0){
+              alert("Ataque fallado! Ataca!");
+
+            }else{
+              vidaPlayer =- (goblin.ataque - player.personaje.defensa);
+              alert("Tienes "+vidaPlayer+" de vida!");
+
+            }
+
+          }else{
+            goblin.vida =- (player.personaje.ataque - goblin.defensa);
+            alert("El enemigo tiene "+goblin.vida+" de vida!");
+
+          }
+        }
+      //}
+    //});
+  }
+}*/
 
 /**
  * Mueve el personaje hacia arriba/de frente en el mapa
@@ -180,40 +282,40 @@ function iniciarCombate(){
  */
 function moveUp() {
   console.log("up");
-  switch (player.estadoPartida.direccion){
+  switch (player.estadoPartida.direccion) {
     case 0:
-        if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
-          player.estadoPartida.y--;
-          pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-          break;
-        }else{
-          return false;
-        }
+      if (player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)) {
+        player.estadoPartida.y--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      } else {
+        return false;
+      }
       break;
     case 1:
-      if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+      if (player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)) {
         player.estadoPartida.x++;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         break;
-      }else{
+      } else {
         return false;
       }
       break;
     case 2:
-      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
+      if (player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)) {
         player.estadoPartida.y++;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         break;
-      }else{
+      } else {
         return false;
       }
       break;
     case 3:
-      if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
+      if (player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)) {
         player.estadoPartida.x--;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         break;
-      }else{
+      } else {
         return false;
       }
       break;
@@ -228,40 +330,40 @@ function moveUp() {
  */
 function moveDown() {
   console.log("down");
-  switch (player.estadoPartida.direccion){
+  switch (player.estadoPartida.direccion) {
     case 0:
-        if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
-          player.estadoPartida.y++;
-          pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-          break;
-        }else{
-          return false;
-        }
+      if (player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)) {
+        player.estadoPartida.y++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      } else {
+        return false;
+      }
       break;
     case 1:
-      if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
+      if (player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)) {
         player.estadoPartida.x--;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         break;
-      }else{
+      } else {
         return false;
       }
       break;
     case 2:
-      if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
+      if (player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)) {
         player.estadoPartida.y--;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         break;
-      }else{
+      } else {
         return false;
       }
       break;
     case 3:
-      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+      if (player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)) {
         player.estadoPartida.x++;
         pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
         break;
-      }else{
+      } else {
         return false;
       }
       break;
@@ -277,7 +379,7 @@ function moveDown() {
 function moveRight() {
   console.log("right");
   player.estadoPartida.direccion++;
-  if(player.estadoPartida.direccion == 4){
+  if (player.estadoPartida.direccion == 4) {
     player.estadoPartida.direccion = 0;
   }
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
@@ -291,7 +393,7 @@ function moveRight() {
 function moveLeft() {
   console.log("left");
   player.estadoPartida.direccion--;
-  if(player.estadoPartida.direccion == -1){
+  if (player.estadoPartida.direccion == -1) {
     player.estadoPartida.direccion = 3;
   }
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);

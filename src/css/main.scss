@@ -35,7 +35,16 @@ body {
   float:left;
   margin: 1em;
   top: 1em;
-  left: 0
+  left: 0;
+  a{
+    display: none;
+    padding: .5em;
+    text-decoration: none;
+    color: #e27924
+  };
+  a:visited{
+    color: #e27924
+  }
 }
 
 #equipocarac {

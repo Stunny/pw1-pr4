@@ -69,7 +69,7 @@ function mapaToImg(x, y) {
       imgSrc = '/pasillo.png';
     break;
     case 'P': //Pared visible
-      imgSrc = '/wall.png';
+      imgSrc = '/muro.jpg';
     break;
     case 'E'://ENEMIGO
       imgSrc = '/goblin.gif';
