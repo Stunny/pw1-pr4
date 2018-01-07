@@ -1,3 +1,71 @@
+/**
+ * Lleva a cabo la creación del personaje
+ */
+function initPlayer(){
+  if(confirm('Empecemos! ¿Listo?')){
+    //Nombre y sexo
+    player.nombre = prompt("Empecemos por conocerte un poco. ¿Cómo te llamas?", "");
+    let sex = prompt("¿Eres un chico, una chica, o te consideras otra cosa y no aceptas la realidadd?", "");
+    $("#namesex").text ( player.nombre + "/" +sex);
+    player.nombre += '/'+sex;
+    //************************Seleccion Tipo de personaje****************************//
+    confirm("Ahora escogeremos la raza con la que quieras jugar");
+
+    loadRaceDialog();
+    $("#race-dialog").dialog('open');
+  }
+}
+
+/**
+ * Carga el dialog de seleccion de personaje
+ */
+function loadRaceDialog(){
+  var humanImg, elfImg, dwarfImg;
+
+  humanImg = $("#select-human").find("img");
+  elfImg = $("#select-elf").find("img");
+  dwarfImg = $("#select-dwarf").find("img");
+
+  //Cargar imagenes del dialog de selesccion de raza
+  humanImg.attr('src', './img/race-human.png');
+  elfImg.attr('src', './img/race-elf.png');
+  dwarfImg.attr('src', './img/race-dwarf.png');
+
+  //Asignar los handlers que se encargaran de ver que raza se escoge
+  humanImg.click(()=>{
+    selectChaaracter("human");
+  });
+  elfImg.click(()=>{
+    selectChaaracter("elf");
+  });
+  dwarfImg.click(()=>{
+    selectChaaracter("dwarf");
+  });
+}
+
+/**
+ * LLeva a cabo la funcionalidad de seleccion de personaje
+ * @param  {string} type Tipo de personaje{"human","elf","dwarf"}
+ */
+function selectChaaracter(type){
+  $("#race-dialog").dialog('close');
+
+  switch(type){
+    case 'human':
+      player.personaje = humano;
+    break;
+    case 'elf':
+      player.personaje = elfo;
+    break;
+    case 'dwarf':
+      player.personaje = enano;
+    break;
+  }
+  $("#img-avatar").attr('src', 'img/'+player.personaje.img);
+  $("#img-avatar").css("display", "block");
+  iniciarJuego();
+}
+
 /* Inicializar el juego por primera vez */
 function iniciarJuego() {
   //actualizacion de la UI
@@ -9,7 +77,7 @@ function iniciarJuego() {
 
   $("#atac").text(player.personaje.ataque);
 
-  console.log($("#protec").text(player.personaje.defensa));
+  $("#protec").text(player.personaje.defensa);
 
   $("#lifepoints").text(vidaPlayer);
 
@@ -26,6 +94,15 @@ function iniciaPartidaCargada(){
   GameData.gameStarted = true;
   mapa = partida.map;
   player = partida.player;
+
+  $("#namesex").text (player.nombre);
+  $("#level").text(player.nivel);
+  $("#xpr").text(player.personaje.xp);
+  $("#atac").text(player.personaje.ataque);
+  $("#protec").text(player.personaje.defensa);
+  $("#lifepoints").text(vidaPlayer);
+  $("#objcts").text(player.personaje.mochila[0].nombre);
+  $("#img-avatar").attr('src', 'img/'+player.personaje.img);
 
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
 }
@@ -98,279 +175,125 @@ function iniciarCombate(){
 }
 
 /**
- * Carga una partida guardada en el web service montado en
- * el servidor de lasalle
+ * Mueve el personaje hacia arriba/de frente en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
-function loadGame(){
-  let slot;
-  do{
-    slot = prompt("¿Qué slot de partida quieres cargar?", "1 / 2");
-  }while (slot != "1" && slot != "2");
-
-  $.ajaxSetup({
-    headers:{"content-type":"application/json"}
-  });
-
-  let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
-
-  let get = $.ajax({
-    async : true,
-    type : 'get',
-    url: url
-  });
-
-  get.done((game, txtstatus)=>{
-    console.log(txtstatus);
-    partida = JSON.parse(game);
-    alert("Partida cargada! 😁");
-    iniciaPartidaCargada();
-  });
-
-  get.fail((jqxhr, textStatus, errorThrown)=>{
-    console.log(textStatus, errorThrown, errorThrown.msg);
-    if(textStatus == "404"){
-      alert("No hay ninguna partida guardada en ese slot 😓");
-    }
-  });
-}
-
-/**
- * Guarda la partida en su estado actual
- */
-function saveGame(){
-  partida.player = player;
-  partida.map = mapa;
-
-  let slot;
-  do{
-    slot = prompt("¿En que slot de guardado quieres almacenar la partida?", "1 / 2");
-  }while (slot != "1" && slot != "2");
-
-  $.ajaxSetup({
-    headers:{"content-type":"application/json"}
-  });
-  let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
-  let post = $.post(url, JSON.stringify(partida), "application/json");
-
-  post.done((res, txtstatus)=>{
-    console.log(res);
-    console.log(txtstatus);
-    alert("Partida guardada con éxito!");
-  });
-
-  post.fail((jqxhr, textStatus, errorThrown)=>{
-    console.log(textStatus, errorThrown, errorThrown.msg);
-  });
-}
-
-/**
- * Elimina una partida guardada en el webservice
- * PLS NO DELET DIS
- */
-function deleteGame(){
-  let slot;
-  do{
-    slot = prompt("¿Qué slot de partida quieres vaciar?", "1 / 2");
-  }while (slot != "1" && slot != "2");
-
-  $.ajaxSetup({
-    headers:{"content-type":"application/json"}
-  });
-
-  let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
-
-  let get = $.ajax({
-    async : true,
-    type : 'delete',
-    url: url
-  });
-
-  get.done((game, txtstatus)=>{
-    console.log(txtstatus);
-    alert("Slot vaciado! 😁");
-  });
-
-  get.fail((jqxhr, textStatus, errorThrown)=>{
-    console.log(textStatus, errorThrown, errorThrown.msg);
-    if(textStatus == "404"|| textStatus == "202"){
-      alert("Este slot ya está vacío!");
-    }
-  });
-}
-
-/**
- * Almacena en la variable global de mapa los datos del mismo
- * @param  {[type]} map texto plano del mapa
- */
-function buildMap(map){
-
-  map = map.split("\n");
-  mapa = [];
-  for(let i = 0; i < 10; i++){
-    mapa.push(map[i].split(""));
+function moveUp() {
+  console.log("up");
+  switch (player.estadoPartida.direccion){
+    case 0:
+        if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
+          player.estadoPartida.y--;
+          pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+          break;
+        }else{
+          return false;
+        }
+      break;
+    case 1:
+      if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+        player.estadoPartida.x++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      }else{
+        return false;
+      }
+      break;
+    case 2:
+      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
+        player.estadoPartida.y++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      }else{
+        return false;
+      }
+      break;
+    case 3:
+      if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
+        player.estadoPartida.x--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      }else{
+        return false;
+      }
+      break;
   }
 
-  for(let i = 0; i < 10; i++)
-    for(let j = 0; j < 10; j++){
-      if(mapa[i][j] == "I"){
-        GameData.startPosition = {
-          x: j,
-          y: i
-        };
-      }
-      if(mapa[i][j] == "S"){
-        GameData.exitPosition = {
-          x: j,
-          y: i
-        };
-      }
-    }
+  checkInteraction();
+}
 
-  console.log("MAPA CARGADO");
-  console.log(mapa);
+/**
+ * Mueve el personaje hacia abajo/atras en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
+ */
+function moveDown() {
+  console.log("down");
+  switch (player.estadoPartida.direccion){
+    case 0:
+        if(player.estadoPartida.y + 1 <= 9 && player.estadoPartida.y + 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y + 1)){
+          player.estadoPartida.y++;
+          pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+          break;
+        }else{
+          return false;
+        }
+      break;
+    case 1:
+      if(player.estadoPartida.y - 1 <= 9 && player.estadoPartida.y - 1 >= 0 && compruebaPared(player.estadoPartida.x, player.estadoPartida.y - 1)){
+        player.estadoPartida.x--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      }else{
+        return false;
+      }
+      break;
+    case 2:
+      if(player.estadoPartida.x - 1 <= 9 && player.estadoPartida.x - 1 >= 0 && compruebaPared(player.estadoPartida.x - 1, player.estadoPartida.y)){
+        player.estadoPartida.y--;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      }else{
+        return false;
+      }
+      break;
+    case 3:
+      if(player.estadoPartida.x + 1 <= 9 && player.estadoPartida.x + 1 >= 0 && compruebaPared(player.estadoPartida.x + 1, player.estadoPartida.y)){
+        player.estadoPartida.x++;
+        pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+        break;
+      }else{
+        return false;
+      }
+      break;
+  }
 
-  GameData.gameStarted = true;
-  player.estadoPartida.x = GameData.startPosition.x;
-  player.estadoPartida.y = GameData.startPosition.y;
-  player.estadoPartida.direccion = 0;
+  checkInteraction();
+}
+
+/**
+ * Mueve el personaje hacia derecha en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
+ */
+function moveRight() {
+  console.log("right");
+  player.estadoPartida.direccion++;
+  if(player.estadoPartida.direccion == 4){
+    player.estadoPartida.direccion = 0;
+  }
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
-}
-
-/**
- * Carga el mapa correspondiente y lo devuelve en una matriz
- * @return {[type]} Matriz con todos los elementos del mapa cargados
- */
-function loadMap(mapa){
-  let rawMap;
-  let fileSrc;
-  switch(mapa){
-    case -3:
-      buildMap(GameData.gameConstants.maps.map3);
-      break;
-    case -2:
-      buildMap(GameData.gameConstants.maps.map2);
-      break;
-    case -1:
-      buildMap(GameData.gameConstants.maps.map1);
-      break;
-  }
-
-}
-
-/**
- *  Segun el tipo de casilla que sea la que el usuario pretende ir se pintara una
- *  cosa u otra
-*/
-function mapaToImg(x, y) {
-  let casilla = mapa[y][x];
-  let imgSrc;
-  switch(casilla){
-    case 'W': //Trollwall
-      imgSrc = '/pasillo.png';
-    break;
-    case 'P': //Pared visible
-      imgSrc = '/wall.png';
-    break;
-    case 'E'://ENEMIGO
-      imgSrc = '/goblin.gif';
-    break;
-    case 'O'://Objeto
-      imgSrc = '/object.png';
-    break;
-    case 'I'://Entrada
-      imgSrc = '/eingang.png';
-    break;
-    case 'S'://Salida
-      imgSrc = '/ausgang.png';
-    break;
-    default:
-      imgSrc = '/pasillo.png';
-    break;
-  }
-  return imgSrc;
-}
-
-/**
- * Asocia las diferentes teclas pulsadas a los eventos que tienen que darse
- * segun lo que el usuario pulse
- * @return {boolean} True siempre
- */
-function bindKeyCodes(){
-  $(document).keypress((e)=>{
-    if(GameData.gameStarted){
-      switch(e.which){
-        case GameData.gameConstants.MOVE_DOWN_CODE:
-          moveDown();
-          break;
-        case GameData.gameConstants.MOVE_UP_CODE:
-          moveUp();
-          break;
-        case GameData.gameConstants.MOVE_LEFT_CODE:
-          moveLeft();
-          break;
-        case GameData.gameConstants.MOVE_RIGHT_CODE:
-          moveRight();
-          break;
-        default:
-        console.log(e.which);
-      }
-    }
-  });
-
   return true;
 }
 
-
 /**
- * Asocia los diferentes scripts controladores asociados a botones
- * del documento HTML
+ * Mueve el personaje hacia izquierda en el mapa
+ * @return {boolean} true si se ha podido llevar a cabo el movimiento
  */
-function iniciarScripts(){
-  GameData.canvas = $('#visor');
-
-  //Inicializacion del dialog de seleccion de raza
-  $("#race-dialog").dialog({
-      autoOpen: false,
-      modal:true,
-      close:()=>{
-        $("#race-dialog").hide();
-      },
-      height: 380,
-      width: 750,
-      modal: true,
-      draggable: false
-  });
-
-  $("#startGame").click((e)=>{
-    initPlayer();
-  });
-
-  $("#loadGame").click((e)=>{
-    loadGame();
-  });
-
-  $("#saveGame").click((e)=>{
-    saveGame();
-  });
-
-  $("#deleteGame").click((e)=>{
-    deleteGame();
-  });
-
-  $("#movesquerra").click((e)=>{
-    if(GameData.gameStarted)
-      moveLeft();
-  });
-  $("#movdreta").click((e)=>{
-    if(GameData.gameStarted)
-      moveRight();
-  });
-  $("#movendavant").click((e)=>{
-    if(GameData.gameStarted)
-      moveUp();
-  });
-  $("#movendarrere").click((e)=>{
-    if(GameData.gameStarted)
-      moveDown();
-  });
+function moveLeft() {
+  console.log("left");
+  player.estadoPartida.direccion--;
+  if(player.estadoPartida.direccion == -1){
+    player.estadoPartida.direccion = 3;
+  }
+  pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
+  return true;
 }
