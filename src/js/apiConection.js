@@ -51,6 +51,23 @@ function saveGame(){
 
   let url = GameData.gameConstants.apiURL+"?token="+GameData.gameConstants.apiToken+"&slot="+slot;
 
+  let del = $.ajax({
+    async : true,
+    type : 'delete',
+    url: url,
+    error: (jqXHR, textStatus, errorThrown)=>{
+      console.log(jqXHR, textStatus, errorThrown.msg);
+    }
+  });
+
+  del.done((game, txtstatus)=>{
+    console.log(txtstatus);
+  });
+
+  del.fail((jqxhr, textStatus, errorThrown)=>{
+    console.log(textStatus, errorThrown, errorThrown.msg);
+  });
+
   let post = $.ajax({
     async : true,
     type : 'post',

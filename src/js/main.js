@@ -89,26 +89,46 @@ function iniciarJuego() {
 
   $("#objcts").text(player.personaje.mochila[0].nombre);
 
+  $("#rightHand").text("");
+  $("#leftHand").text("");
+  player.manoderecha = null;
+  player.manoizquierda = null;
+
   //generacion del primer piso
   loadMap(-3);
 }
 
 /**
- * Pone en ejecucion la partida cargada desde el webservice
+ * Pone en ejecucion la partida cargada desde el webservice y carga la UI
+ * con los datos de la misma
  */
 function iniciaPartidaCargada() {
   GameData.gameStarted = true;
   mapa = partida.map;
   player = partida.player;
+  $("#rightHand").text("");
+  $("#leftHand").text("");
 
+  $("#img-avatar").attr('src', 'img/' + player.personaje.img);
+  $("#img-avatar").show();
   $("#namesex").text(player.nombre);
   $("#level").text(player.nivel);
   $("#xpr").text(player.personaje.xp);
   $("#atac").text(player.personaje.ataque);
   $("#protec").text(player.personaje.defensa);
   $("#lifepoints").text(vidaPlayer);
+
   $("#objcts").text(player.personaje.mochila[0].nombre);
-  $("#img-avatar").attr('src', 'img/' + player.personaje.img);
+  for(let i = 1; i<player.personaje.mochila.length; i++){
+    $("#objcts").text($("#objcts").text()+", "+player.personaje.mochila[i].nombre);
+  }
+
+  if(player.manoizquierda != null){
+    $("#leftHand").text(player.manoizquierda.nombre);
+  }
+  if(player.manoderecha != null){
+    $("#rightHand").text(player.manoderecha.nombre);
+  }
 
   pintaPosicion(player.estadoPartida.x, player.estadoPartida.y);
 }
@@ -151,46 +171,36 @@ function generateEnemy() {
 /**
  * Ejecuta el proceso de recoger un objeto del suelo
  * o pasar de largo
- * TODO: Mostrar en la UI los objetos de las manos
  */
 function iniciarRecogidaDeObjeto() {
   if (confirm("Objeto encontrado! Deseas recoger " + generateObject() + "?")) {
     if (confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")) {
       let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
-      let mano;
-      switch (hand) {
-        case "I":
-          mano = player.manoizquierda;
-          break;
-        case "D":
-          mano = player.manoderecha;
-          break;
-      }
+      let mano, manoV;
 
-      if (mano != null) {
-        player.personaje.mochila.push(mano);
-        $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+      if(hand == "I"|| hand == "i"){
 
-        /*player.personaje.ataque += GameData.currentFoundObj.ataque;
-        console.log(player.personaje.ataque+" + "+GameData.currentFoundObj.ataque);
-        $("#atac").text(""+player.personaje.ataque + GameData.currentFoundObj.ataque);
-        player.personaje.defensa += GameData.currentFoundObj.defensa;
-        $("#defensa").text(""+player.personaje.defensa + GameData.currentFoundObj.defensa);
-        console.log("defensa= "+GameData.currentFoundObj.defensa);
-        console.log("ataque= "+GameData.currentFoundObj.ataque);*/
+        if (player.manoizquierda != null) {
+          player.personaje.mochila.push(player.manoizquierda);
+          $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+        }
+        player.manoizquierda = GameData.currentFoundObj;
+        $("#leftHand").text(GameData.currentFoundObj.nombre);
+
+      } else if (hand == "D"|| hand == "d") {
+
+        if (mano != null) {
+          player.personaje.mochila.push(player.manoderecha);
+          $("#objcts").text($("#objcts").text() + ", " + player.manoderecha.nombre);
+        }
+        player.manoderecha = GameData.currentFoundObj;
+        $("#rightHand").text(GameData.currentFoundObj.nombre);
+
       }
-      mano = GameData.currentFoundObj;
 
     } else {
       player.personaje.mochila.push(GameData.currentFoundObj);
       $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);
-
-      /*player.personaje.ataque += GameData.currentFoundObj.ataque;
-      $("#atac").text(player.personaje.ataque);
-      player.personaje.defensa += GameData.currentFoundObj.defensa;
-      $("#defensa").text(player.personaje.defensa);
-      console.log("ataque= "+GameData.currentFoundObj.ataque);
-      console.log("defensa= "+GameData.currentFoundObj.defensa);*/
     }
   }
   console.log("actualisa mierda");
@@ -205,7 +215,7 @@ function iniciarRecogidaDeObjeto() {
 }
 
 /**
- * TODO: Ejecuta el proceso de entrar en combate con un enemigo
+ * Ejecuta el proceso de entrar en combate con un enemigo
  * encontrado por el camino hacia la salida de la planta
  */
 function iniciarCombate() {
@@ -216,7 +226,6 @@ function iniciarCombate() {
 
 
   alert("Enemigo Vida= " + enemy + "\nAtaque enemy= " + GameData.currentEnemy.ataque);
-  alert("Player Vida= " + player.vida + "\nAtaque player= " + player.personaje.ataque);
 
   /*
    * El sistema de combate según el enunciado no tenía mucho sentido
@@ -319,27 +328,36 @@ function iniciarCombate() {
 
     alert("El enemigo ha muerto!");
 
-
+    // *****************************LOOT DE COMBATE*********************//
     if (!looted) {
 
       if (confirm("Objeto looteado! Deseas recoger " + generateObject() + "?")) {
         if (confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")) {
           let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
-          let mano;
-          switch (hand) {
-            case "I":
-              mano = player.manoizquierda;
-              break;
-            case "D":
-              mano = player.manoderecha;
-              break;
+          let mano, manoV;
+
+          if(hand == "I"|| hand == "i"){
+
+            mano = player.manoizquierda;
+            if (mano != null) {
+              player.personaje.mochila.push(mano);
+              $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+            }
+            mano = GameData.currentFoundObj;
+            $("#leftHand").text(mano.nombre);
+
+          } else if (hand == "D"|| hand == "d") {
+
+            mano = player.manoderecha;
+            if (mano != null) {
+              player.personaje.mochila.push(mano);
+              $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+            }
+            mano = GameData.currentFoundObj;
+            $("#rightHand").text(mano.nombre);
+
           }
 
-          if (mano != null) {
-            player.personaje.mochila.push(mano);
-            $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
-          }
-          mano = GameData.currentFoundObj;
 
         } else {
           player.personaje.mochila.push(GameData.currentFoundObj);
@@ -373,9 +391,7 @@ function iniciarCombate() {
 
         if(player.nivel % 2 == 0){
           $("#atac").text(player.personaje.ataque += 1);
-
         }
-
       }
     }
   } else {
