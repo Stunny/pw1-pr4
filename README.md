@@ -1,6 +1,6 @@
 # AJAX Web Dungeon
 
-![Dungeon Master](https://imgur.com/a/VTMS5)
+![Dungeon Master](https://media.giphy.com/media/l49K0OPPzsF7bJvMY/giphy.gif)
 
 Dungeon Master es un minijuego de navegador desarrollado en su totalidad en Javascript y HTML. El objetivo de este  proyecto es poner en practica todos los conocimientos impartidos en la asignatura de Programación Web 1 en la universidad LaSalle Campus Barcelona.
 
