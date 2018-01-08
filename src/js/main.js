@@ -170,36 +170,21 @@ function iniciarRecogidaDeObjeto() {
 function iniciarCombate() {
   let escape = false;
   let looted = false;
-  $("#attackbutton").css("display", "block");
+  let enemy = parseInt(goblin.vida);
+  //$("#attackbutton").css("display", "block");
 
-  alert("Goblin Vida= "+goblin.vida+"\nAtaque enemy: "+goblin.ataque);
-  alert("Player Vida= "+vidaPlayer+"\nAtaque player: "+player.personaje.ataque);
-
-
+  console.log(enemy);
+  alert("Goblin Vida= "+goblin.vida+"\nAtaque enemy= "+goblin.ataque);
+  alert("Player Vida= "+vidaPlayer+"\nAtaque player= "+player.personaje.ataque);
 
   if (confirm("Enemigo salvaje apareció! Luchar(Aceptar) o huir(Cancelar)?")) {
 
-    while (!escape || goblin.vida <= 0) {
+    while (!escape && enemy > 0) {
 
-      if (goblin.vida == 0) {
-        alert("El enemigo ha muerto!");
-
-        if (!looted) {
-          player.personaje.mochila.push(generateObject());
-          $("#objcts").text($("#objcts").text() + ", " + generateObject());
-          alert("Objeto looteado!");
-          looted = true;
-        }
-        escape = true;
-
-      } else {
-
-        if (goblin.vida - (player.personaje.ataque - goblin.defensa) < 0) {
-
+        if ((enemy - (player.personaje.ataque - goblin.defensa)) < 0) {
           if (confirm("Ataque fallado! Ataca el enemigo!")) {
 
-            if (vidaPlayer - (goblin.ataque - player.personaje.defensa) < 0) {
-
+            if ((vidaPlayer - (goblin.ataque - player.personaje.defensa)) < 0) {
               if (confirm("Ataque fallado! Ataca!")) {
 
               }else{
@@ -212,7 +197,7 @@ function iniciarCombate() {
 
               if(vidaPlayer <= 0){
 
-                alert("Te han matao");
+                alert("You died!");
                 GameData.gameStarted = false;
               }
             }
@@ -222,10 +207,51 @@ function iniciarCombate() {
           }
 
         }else{
-          goblin.vida =- (player.personaje.ataque - goblin.defensa);
+          enemy =- (player.personaje.ataque - goblin.defensa);
+          alert("Golpe de "+(player.personaje.ataque - goblin.defensa)+" realizado!");
           alert("El enemigo tiene "+goblin.vida+" de vida!");
         }
       }
+
+      if (enemy == 0) {
+        alert("El enemigo ha muerto!");
+
+        if (!looted) {
+
+          /*player.personaje.mochila.push(generateObject());
+          $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);*/
+
+          if (confirm("Objeto looteado! Deseas recoger " + generateObject() + "?")) {
+            if (confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")) {
+              let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
+              let mano;
+              switch (hand) {
+                case "I":
+                  mano = player.manoizquierda;
+                  break;
+                case "D":
+                  mano = player.manoderecha;
+                  break;
+              }
+
+              if (mano != null) {
+                player.personaje.mochila.push(mano);
+                $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+              }
+              mano = GameData.currentFoundObj;
+
+            } else {
+              player.personaje.mochila.push(GameData.currentFoundObj);
+              $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);
+            }
+          }
+
+
+          alert("Objeto looteado! Sigue adelante!");
+          looted = true;
+
+        }
+        //escape = true;
     }
 
   } else {
@@ -234,9 +260,6 @@ function iniciarCombate() {
   }
 
 }
-
-
-
 
 
 
