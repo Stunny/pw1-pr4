@@ -72,7 +72,8 @@ function mapaToImg(x, y) {
       imgSrc = '/muro.jpg';
     break;
     case 'E'://ENEMIGO
-      imgSrc = '/goblin.gif';
+      generateEnemy();
+      imgSrc = "./"+GameData.currentEnemy.img;
     break;
     case 'O'://Objeto
       imgSrc = '/object.png';
@@ -100,6 +101,7 @@ function checkInteraction(){
   //console.log(mapa[playerPosY][playerPosX]);
   switch(mapa[playerPosY][playerPosX]){
     case "E"://CAsilla de enemigo: activar combate
+
       iniciarCombate();
     break;
 
