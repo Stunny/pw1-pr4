@@ -22,40 +22,47 @@ var objetos = {
 
 //IMPLEMENTAR XP Y OBJETOS DE LOS ENEMIGO DE FORMA QUE NO ESTEN OP
 //***************************TIPOS DE ENEMIGO*********************************//
+
 var goblin = {
+  nombre: "Goblin",
   vida:5,
   ataque:2,
   defensa:0,
-  xp:0,
+  xp:10,
   img:"goblin.gif",
   objetos:[]
 };
 
 var orco = {
-  vida:7,
+  nombre: "Orco",
+  vida:12,
   ataque:4,
   defensa:2,
-  xp:0,
+  xp:20,
   img:"orc.gif",
   objetos:[]
 };
 
 var araña = {
-  vida:10,
-  ataque:7,
-  defensa:6,
-  xp:0,
+  nombre: "Araña",
+  vida:15,
+  ataque:10,
+  defensa:8,
+  xp:30,
   img:"spider.gif",
   objetos:[]
 };
 
+var enemigos = {
+  araña, orco, goblin
+};
 
 //***************************TIPOS DE PERSONAJE*******************************//
 
 var player = {
   nombre:"",
   vida: vidaPlayer,
-  nivel:0,
+  nivel:1,
   personaje:null,
   manoderecha:null,
   manoizquierda:null,

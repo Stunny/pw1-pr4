@@ -2,6 +2,7 @@
  * Lleva a cabo la creación del personaje
  */
 function initPlayer() {
+
   if (confirm('Empecemos! ¿Listo?')) {
     //Nombre y sexo
     player.nombre = prompt("Empecemos por conocerte un poco. ¿Cómo te llamas?", "");
@@ -72,13 +73,18 @@ function iniciarJuego() {
   player.nivel = 1;
   $("#level").text(player.nivel);
 
+  GameData.reqXP = 20;
+
   player.personaje.xp = 0;
   $("#xpr").text(player.personaje.xp);
 
+  player.personaje.ataque += player.personaje.mochila[0].ataque;
   $("#atac").text(player.personaje.ataque);
 
+  player.personaje.defensa += player.personaje.mochila[0].defensa;
   $("#protec").text(player.personaje.defensa);
 
+  vidaPlayer += player.personaje.mochila[0].hp;
   $("#lifepoints").text(vidaPlayer);
 
   $("#objcts").text(player.personaje.mochila[0].nombre);
@@ -126,9 +132,20 @@ function iniciarNuevoNivel() {
  */
 function generateObject() {
 
-  let obj = Math.floor(Math.random() * (_.size(objetos) - 1));
+  let obj = Math.floor(Math.random() * (_.size(objetos)));
   GameData.currentFoundObj = objetos[Object.keys(objetos)[obj]];
   return GameData.currentFoundObj.nombre;
+}
+
+/**
+ * Genera un enemigo random de la pool para farmearlo
+ * @return {string} nombre del enemigo
+ */
+function generateEnemy() {
+
+  let en = Math.floor(Math.random() * (_.size(enemigos)));
+  GameData.currentEnemy = enemigos[Object.keys(enemigos)[en]];
+  return GameData.currentEnemy.nombre;
 }
 
 /**
@@ -153,14 +170,38 @@ function iniciarRecogidaDeObjeto() {
       if (mano != null) {
         player.personaje.mochila.push(mano);
         $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+
+        /*player.personaje.ataque += GameData.currentFoundObj.ataque;
+        console.log(player.personaje.ataque+" + "+GameData.currentFoundObj.ataque);
+        $("#atac").text(""+player.personaje.ataque + GameData.currentFoundObj.ataque);
+        player.personaje.defensa += GameData.currentFoundObj.defensa;
+        $("#defensa").text(""+player.personaje.defensa + GameData.currentFoundObj.defensa);
+        console.log("defensa= "+GameData.currentFoundObj.defensa);
+        console.log("ataque= "+GameData.currentFoundObj.ataque);*/
       }
       mano = GameData.currentFoundObj;
 
     } else {
       player.personaje.mochila.push(GameData.currentFoundObj);
       $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);
+
+      /*player.personaje.ataque += GameData.currentFoundObj.ataque;
+      $("#atac").text(player.personaje.ataque);
+      player.personaje.defensa += GameData.currentFoundObj.defensa;
+      $("#defensa").text(player.personaje.defensa);
+      console.log("ataque= "+GameData.currentFoundObj.ataque);
+      console.log("defensa= "+GameData.currentFoundObj.defensa);*/
     }
   }
+  console.log("actualisa mierda");
+  console.log(player.personaje.ataque += GameData.currentFoundObj.ataque);
+  console.log(player.personaje.defensa += GameData.currentFoundObj.defensa);
+  console.log(player.vida += GameData.currentFoundObj.hp);
+
+  $("#atac").text(player.personaje.ataque);
+  $("#protec").text(player.personaje.defensa);
+  $("#lifepoints").text(player.vida);
+
 }
 
 /**
@@ -170,134 +211,179 @@ function iniciarRecogidaDeObjeto() {
 function iniciarCombate() {
   let escape = false;
   let looted = false;
-  let enemy = parseInt(goblin.vida);
-  //$("#attackbutton").css("display", "block");
+  let enemy = GameData.currentEnemy.vida;
+  let prob;
 
-  console.log(enemy);
-  alert("Goblin Vida= "+goblin.vida+"\nAtaque enemy= "+goblin.ataque);
-  alert("Player Vida= "+vidaPlayer+"\nAtaque player= "+player.personaje.ataque);
+
+  alert("Enemigo Vida= " + enemy + "\nAtaque enemy= " + GameData.currentEnemy.ataque);
+  alert("Player Vida= " + player.vida + "\nAtaque player= " + player.personaje.ataque);
+
+  /*
+   * El sistema de combate según el enunciado no tenía mucho sentido
+   * ya que genera un bucle infinito de ataques si el daño generado no
+   * es igual a la vida restante del enemigo.
+   *
+   * Probabilidad de fallo generada de forma "Math.random()"
+   * Probabilidad de fallo = 20%
+   * Probabilidad de crítico = 10%
+   */
 
   if (confirm("Enemigo salvaje apareció! Luchar(Aceptar) o huir(Cancelar)?")) {
 
     while (!escape && enemy > 0) {
 
-        if ((enemy - (player.personaje.ataque - goblin.defensa)) < 0) {
-          if (confirm("Ataque fallado! Ataca el enemigo!")) {
+      prob = Math.random();
 
-            if ((vidaPlayer - (goblin.ataque - player.personaje.defensa)) < 0) {
-              if (confirm("Ataque fallado! Ataca!")) {
+      if (prob >= 0.2) {
+        if (prob >= 0.9) {
 
-              }else{
-                escape = true;
-              }
+          if (GameData.currentEnemy.defensa < (2 * player.personaje.ataque)) {
+            enemy -= ((2 * player.personaje.ataque) - GameData.currentEnemy.defensa);
+            alert("Golpe crítico de " + ((2 * player.personaje.ataque) - GameData.currentEnemy.defensa) + " realizado!");
+            alert("El enemigo tiene " + enemy + " de vida!");
 
-            }else{
-              vidaPlayer =- (vidaPlayer - player.personaje.defensa);
-              alert("El enemigo tiene "+vidaPlayer+" de vida!");
+          } else {
+            alert("Falta daño!");
 
-              if(vidaPlayer <= 0){
-
-                alert("You died!");
-                GameData.gameStarted = false;
-              }
-            }
-
-          }else{
-            escape = true;
           }
 
+        } else {
+          if (GameData.currentEnemy.defensa < player.personaje.ataque) {
+            enemy -= (player.personaje.ataque - GameData.currentEnemy.defensa);
+            alert("Golpe de " + (player.personaje.ataque - GameData.currentEnemy.defensa) + " realizado!");
+
+            if(enemy <= 0){
+              break;
+
+            }else{
+              alert("El enemigo tiene " + enemy + " de vida!");
+
+            }
+          } else {
+            alert("Falta daño!");
+
+          }
+        }
+      }else{
+        alert("Ataque fallado! Turno del enemigo!");
+
+      }
+
+      prob = Math.random();
+
+      if(enemy > 0){
+        if (prob >= 0.2) {
+          if (prob >= 0.9) {
+
+            if (player.personaje.defensa < (2 * GameData.currentEnemy.ataque)) {
+              player.vida -= ((2 * GameData.currentEnemy.ataque) - player.personaje.defensa);
+              alert("Golpe crítico de " + ((2 * GameData.currentEnemy.ataque) - player.personaje.defensa) + " recibido!");
+              alert("Tienes " + player.vida + " de vida!");
+
+            } else {
+              alert("Daño bloqueado por tu defensa!");
+
+            }
+
+          } else {
+            if (player.personaje.defensa < (GameData.currentEnemy.ataque)) {
+              player.vida -= (GameData.currentEnemy.ataque - player.personaje.defensa);
+              alert("Golpe de " + (GameData.currentEnemy.ataque - player.personaje.defensa) + " recibido!");
+              alert("Tienes " + player.vida + " de vida!");
+
+            } else {
+
+              if (confirm("Daño bloqueado por tu defensa! Ataca! ... O escapa (Cancelar)")) {
+
+              } else {
+                escape = true;
+              }
+            }
+          }
         }else{
-          enemy =- (player.personaje.ataque - goblin.defensa);
-          alert("Golpe de "+(player.personaje.ataque - goblin.defensa)+" realizado!");
-          alert("El enemigo tiene "+goblin.vida+" de vida!");
+          if (confirm("El enemigo ha fallado! Ataca! ... O escapa (Cancelar)")) {
+
+          } else {
+            escape = true;
+          }
         }
       }
 
-      if (enemy == 0) {
-        alert("El enemigo ha muerto!");
+      if (player.vida <= 0) {
 
-        if (!looted) {
-
-          /*player.personaje.mochila.push(generateObject());
-          $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);*/
-
-          if (confirm("Objeto looteado! Deseas recoger " + generateObject() + "?")) {
-            if (confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")) {
-              let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
-              let mano;
-              switch (hand) {
-                case "I":
-                  mano = player.manoizquierda;
-                  break;
-                case "D":
-                  mano = player.manoderecha;
-                  break;
-              }
-
-              if (mano != null) {
-                player.personaje.mochila.push(mano);
-                $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
-              }
-              mano = GameData.currentFoundObj;
-
-            } else {
-              player.personaje.mochila.push(GameData.currentFoundObj);
-              $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);
-            }
-          }
-
-
-          alert("Objeto looteado! Sigue adelante!");
-          looted = true;
-
-        }
-        //escape = true;
+        alert("You died!");
+        GameData.gameStarted = false;
+        break;
+      }
     }
 
+    alert("El enemigo ha muerto!");
+
+
+    if (!looted) {
+
+      if (confirm("Objeto looteado! Deseas recoger " + generateObject() + "?")) {
+        if (confirm("Deseas equiparlo(Aceptar) o guardarlo en la mochila(Cancelar)?")) {
+          let hand = prompt("¿Quieres equiparlo en la mano derecha o la izquierda?", "D/I");
+          let mano;
+          switch (hand) {
+            case "I":
+              mano = player.manoizquierda;
+              break;
+            case "D":
+              mano = player.manoderecha;
+              break;
+          }
+
+          if (mano != null) {
+            player.personaje.mochila.push(mano);
+            $("#objcts").text($("#objcts").text() + ", " + mano.nombre);
+          }
+          mano = GameData.currentFoundObj;
+
+        } else {
+          player.personaje.mochila.push(GameData.currentFoundObj);
+          $("#objcts").text($("#objcts").text() + ", " + GameData.currentFoundObj.nombre);
+        }
+      }
+
+      console.log("actualisa mierda");
+      console.log(player.personaje.ataque += GameData.currentFoundObj.ataque);
+      console.log(player.personaje.defensa += GameData.currentFoundObj.defensa);
+      console.log(player.vida += GameData.currentFoundObj.hp);
+      console.log(player.personaje.xp += GameData.currentEnemy.xp);
+
+      $("#atac").text(player.personaje.ataque);
+      $("#protec").text(player.personaje.defensa);
+      $("#lifepoints").text(player.vida);
+      $("#xpr").text(player.personaje.xp);
+
+
+      alert("Objeto looteado! Sigue adelante!");
+      looted = true;
+
+
+      if(player.personaje.xp >= GameData.reqXP){
+
+        $("#level").text(player.nivel += 1);
+        alert("LEVEL UP!");
+
+        GameData.reqXP += (player.nivel + 1) * 10;
+        $("#protec").text(player.personaje.defensa += 1);
+
+        if(player.nivel % 2 == 0){
+          $("#atac").text(player.personaje.ataque += 1);
+
+        }
+
+      }
+    }
   } else {
     escape = true;
 
   }
-
 }
 
-
-
-//$("#attackbutton").css("display", "block");
-//alert("Ataca!");
-//alert(goblin.vida);
-//alert(vidaPlayer);
-
-/*$("#attackbutton").click(function() {
-      if(goblin.vida == 0){
-        alert("El enemigo ha muerto!");
-        player.personaje.mochila.push(generateObject());
-
-      }else{
-
-        while (vidaPlayer == 0 || goblin.vida == 0) {
-          if(player.personaje.ataque - goblin.defensa < 0){
-            alert("Ataque fallado! Ataca el enemigo!");
-
-            if(goblin.ataque - player.personaje.defensa < 0){
-              alert("Ataque fallado! Ataca!");
-
-            }else{
-              vidaPlayer =- (goblin.ataque - player.personaje.defensa);
-              alert("Tienes "+vidaPlayer+" de vida!");
-
-            }
-
-          }else{
-            goblin.vida =- (player.personaje.ataque - goblin.defensa);
-            alert("El enemigo tiene "+goblin.vida+" de vida!");
-
-          }
-        }
-      //}
-    //});
-  }
-}*/
 
 /**
  * Mueve el personaje hacia arriba/de frente en el mapa

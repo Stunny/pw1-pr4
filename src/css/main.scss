@@ -36,15 +36,7 @@ body {
   margin: 1em;
   top: 1em;
   left: 0;
-  /*a{
-    display: none;
-    padding: .5em;
-    text-decoration: none;
-    color: #e27924
-  };
-  a:visited{
-    color: #e27924
-  }*/
+
 }
 
 #equipocarac {
@@ -53,9 +45,15 @@ body {
   margin: 1em;
   top: 1em;
   right: 0;
+  width: 40%;
+
   p{
+    width: 100%;
     span{
+      line-height: 1.5;
+      width: 100%;
       color:#e27924;
+      overflow: hidden;
     }
   };
   p.avatar{
